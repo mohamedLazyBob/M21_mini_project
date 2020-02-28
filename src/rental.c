@@ -4,6 +4,7 @@ int		print_rental_menu()
 {
 	int	choice;
 
+	choice = 0;
 	do
 	{
 		system("clear");
@@ -23,7 +24,9 @@ int		print_rental_menu()
 	} while (choice < 1 || choice > 6);
 	return (choice);
 }
-void	ft_rental_management(int cars_fd, int clients_fd, int contracts_fd)
+void	ft_rental_management(FILE *cars_fd, 
+						   	 FILE *clients_fd, 
+							 FILE *contracts_fd)
 {
 	int choice;
 

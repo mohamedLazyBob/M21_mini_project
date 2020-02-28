@@ -29,6 +29,7 @@ int		print_menu_principal()
 {
 	int	choice;
 
+	choice = 0;
 	do
 	{
 		system("clear");
@@ -50,14 +51,14 @@ int		print_menu_principal()
 
 int		main(void)
 {
-	int	fd_cars;
-	int	fd_clients;
-	int	fd_contracts;
+	FILE	*fd_cars;
+	FILE	*fd_clients;
+	FILE	*fd_contracts;
 	int choice;
 
-	fd_cars = open("cars.db", O_CREAT);
-	fd_clients = open("clients.db", O_CREAT);
-	fd_contracts = open("contracts.db", O_CREAT);
+	fd_cars = fopen("cars.db", "r+");
+	fd_clients = fopen("clients.db", "r+");
+	fd_contracts = fopen("contracts.db", "r+");
 
 	do
 	{
@@ -65,7 +66,7 @@ int		main(void)
 		if (choice == 1)
 			ft_rental_management(fd_cars, fd_clients, fd_contracts);
 	   	else if (choice == 2)
-	   		ft_cars_management(fd_cars, fd_clients, fd_contracts);
+	   		ft_cars_management(fd_cars);
 	   	else if (choice == 3)
 	   		ft_clients_management(fd_cars, fd_clients, fd_contracts);
 	} while (choice > 0 && choice < 4);
