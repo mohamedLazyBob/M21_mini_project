@@ -2,8 +2,10 @@
 #define MINI_PROJECT_H
 
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <unistd.h>
 
 
 typedef struct	date
@@ -52,22 +54,25 @@ int		print_menu_principal();
 /*
 **  in file : rental.c
 */
-void	ft_rental_management(FILE *cars_fd, 
-							 FILE *clients_fd, 
-							 FILE *contracts_fd);
+void	ft_rental_management(void);
 
 /*
 **  in file : clien.c
 */
-void	ft_clients_management(FILE *cars_fd, 
-							  FILE *clients_fd, 
-							  FILE *contracts_fd);
+void	ft_clients_management(void);
 
 /*
 **  in file : cars.c
 */
-void	ft_cars_management(FILE *cars_fd);
-void	ft_list_cars(FILE *fd);
-void	 get_car_input(voiture *car);
+void	ft_cars_management(void);
+int		print_cars_menu(void);
+void	ft_list_cars();
+int		read_one_car_info(FILE *cars, voiture *car);
 void	ft_add_car(void);
+void	ft_add_this_car(voiture car, char *filename);
+void	get_car_input(voiture *car);
+void	ft_modify_car_info(void);
+int		print_modify_menu(int *id, int *choice, int *nbr, char *str);
+void	ft_delete_car(void);
+void	delete_this_car(voiture car);
 #endif

@@ -32,7 +32,7 @@ int		print_menu_principal()
 	choice = 0;
 	do
 	{
-		system("clear");
+//		system("clear");
 		printf("\t\t -------------------------------\t\t\t\n");
 		printf("\t\t|\tMenu Principal\t\t|\n");
 		printf("\t\t -------------------------------\t\t\t\n\n");
@@ -51,24 +51,17 @@ int		print_menu_principal()
 
 int		main(void)
 {
-	FILE	*fd_cars;
-	FILE	*fd_clients;
-	FILE	*fd_contracts;
 	int choice;
-
-	fd_cars = fopen("cars.db", "r+");
-	fd_clients = fopen("clients.db", "r+");
-	fd_contracts = fopen("contracts.db", "r+");
 
 	do
 	{
 		choice = print_menu_principal();
 		if (choice == 1)
-			ft_rental_management(fd_cars, fd_clients, fd_contracts);
+			ft_rental_management();
 	   	else if (choice == 2)
-	   		ft_cars_management(fd_cars);
+	   		ft_cars_management();
 	   	else if (choice == 3)
-	   		ft_clients_management(fd_cars, fd_clients, fd_contracts);
+	   		ft_clients_management();
 	} while (choice > 0 && choice < 4);
 	return (0);
 }

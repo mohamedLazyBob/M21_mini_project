@@ -7,7 +7,7 @@ int		print_rental_menu()
 	choice = 0;
 	do
 	{
-		system("clear");
+//		system("clear");
 		printf("\t\t -------------------------------\t\t\t\n");
 		printf("\t\t|\tLocation d'une voiture\t\t|\n");
 		printf("\t\t -------------------------------\t\t\t\n\n");
@@ -24,9 +24,7 @@ int		print_rental_menu()
 	} while (choice < 1 || choice > 6);
 	return (choice);
 }
-void	ft_rental_management(FILE *cars_fd, 
-						   	 FILE *clients_fd, 
-							 FILE *contracts_fd)
+void	ft_rental_management(void)
 {
 	int choice;
 

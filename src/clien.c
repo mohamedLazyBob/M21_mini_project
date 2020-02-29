@@ -7,7 +7,7 @@ int		print_clients_menu()
 	choice = 0;
 	do
 	{
-		system("clear");
+//		system("clear");
 		printf("\t\t -------------------------------\t\t\t\n");
 		printf("\t\t|\tGestion des Clients\t\t|\n");
 		printf("\t\t -------------------------------\t\t\t\n\n");
@@ -25,9 +25,7 @@ int		print_clients_menu()
 }
 
 
-void	ft_clients_management(FILE *cars_fd, 
-							  FILE *clients_fd, 
-							  FILE *contracts_fd)
+void	ft_clients_management(void)
 {
 	int choice;
 
