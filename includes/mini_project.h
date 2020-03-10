@@ -10,9 +10,10 @@
 
 typedef struct	date
 {
+	int	year;
+	int	mois;
+	int	jour;
 	int	hh;
-	int mm;
-	int	ss;
 }				date;
 
 typedef struct	Voiture
@@ -55,6 +56,22 @@ int		print_menu_principal();
 **  in file : rental.c
 */
 void	ft_rental_management(void);
+int		print_rental_menu();
+
+void	ft_visualizer_les_contrat();
+int		read_one_contrat(FILE *file, contrat *cntr);
+
+void	louer_une_voiture();
+void	get_contrat_input(contrat *cntr);
+void	add_this_contrat(contrat cntr, char *filename);
+
+void	retourner_une_voiture();
+
+void	modifier_une_contrat();
+void	get_contrat_modification(float *contrat_id, int *choix);
+
+void	sup_une_contrat();
+void	sup_cette_contrat(contrat cntr);
 
 /*
 **  in file : clien.c
@@ -75,4 +92,5 @@ void	ft_modify_car_info(void);
 int		print_modify_menu(int *id, int *choice, int *nbr, char *str);
 void	ft_delete_car(void);
 void	delete_this_car(voiture car);
+void	modifier_car_enLocation(int	id, char *str);
 #endif
