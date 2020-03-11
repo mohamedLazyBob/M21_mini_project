@@ -60,6 +60,7 @@ int		print_rental_menu();
 
 void	ft_visualizer_les_contrat();
 int		read_one_contrat(FILE *file, contrat *cntr);
+void	print_one_contrat(contrat contrat);
 
 void	louer_une_voiture();
 void	get_contrat_input(contrat *cntr);
@@ -71,7 +72,7 @@ void	modifier_une_contrat();
 void	get_contrat_modification(float *contrat_id, int *choix);
 
 void	sup_une_contrat();
-void	sup_cette_contrat(contrat cntr);
+void	del_one_contrat(contrat cntr);
 
 /*
 **  in file : clien.c
