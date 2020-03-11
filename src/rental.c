@@ -235,7 +235,6 @@ void	sup_une_contrat()
 		if (contrat.idVoiture == id)
 			break;
 	}
-	printf("DEBUG\n");
 	while (1)
 	{
 		read_one_car_info(cars, &car);

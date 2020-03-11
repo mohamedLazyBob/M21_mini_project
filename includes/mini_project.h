@@ -78,6 +78,16 @@ void	del_one_contrat(contrat cntr);
 **  in file : clien.c
 */
 void	ft_clients_management(void);
+void	list_all_clients();
+void	add_client();
+void	modify_client();
+void	del_client();
+
+void	add_this_client(client cl, char *file);
+int		read_one_client(client *cl, FILE *file);
+void	del_this_client(client cl);
+void	print_one_client(client cl);
+void	get_client_info(client *cl);
 
 /*
 **  in file : cars.c
@@ -94,4 +104,5 @@ int		print_modify_menu(int *id, int *choice, int *nbr, char *str);
 void	ft_delete_car(void);
 void	delete_this_car(voiture car);
 void	modifier_car_enLocation(int	id, char *str);
+
 #endif
