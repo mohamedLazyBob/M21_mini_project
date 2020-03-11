@@ -111,7 +111,7 @@ void	modify_client()
 			fclose(file);
 			if (choix >= 1 && choix <= 5)
 			{
-				del_this_client(cl);
+				del_this_client(cl.idClient);
 				
 				printf("saisir la modification : ");
 				if (choix == 1)			scanf("%s", cl.nom);
@@ -136,8 +136,11 @@ void	modify_client()
 
 void	del_client()
 {
-	
+	int		id;
 
+	printf("Donner l'id du contrat que vous souhaitez supprimer : ");
+	scanf("%d", &id);
+	del_this_client(id);
 }
 
 /*
@@ -183,7 +186,7 @@ int	read_one_client(client *cl, FILE *file)
 	return (ret);
 }
 
-void	del_this_client(client cl)
+void	del_this_client(int	id)
 {
 	FILE	*ptr1, *ptr2;
 	client	temp_client;
@@ -198,7 +201,7 @@ void	del_this_client(client cl)
 		tmp = read_one_client(&temp_client, ptr1);
 		if (tmp == EOF)
 			break;
-		if (temp_client.idClient != cl.idClient)
+		if (temp_client.idClient != id)
 			add_this_client(temp_client, "clients_replica.txt");
 	}
 	fclose(ptr1);

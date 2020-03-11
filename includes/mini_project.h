@@ -85,7 +85,7 @@ void	del_client();
 
 void	add_this_client(client cl, char *file);
 int		read_one_client(client *cl, FILE *file);
-void	del_this_client(client cl);
+void	del_this_client(int id);
 void	print_one_client(client cl);
 void	get_client_info(client *cl);
 
