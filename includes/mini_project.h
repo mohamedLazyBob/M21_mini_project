@@ -7,6 +7,13 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#define  HORZ	"\u2501\u2501\u2501\u2501"
+#define  VERT	"\u2503"
+#define  UL	"\u250F"
+#define  UR	"\u2513"
+#define  DL	"\u2517"
+#define  DR	"\u251B"
+#define	 ENDL	   "\n"
 
 typedef struct	date
 {
@@ -50,13 +57,12 @@ typedef	struct	client
 /*
 **  in file : main.c
 */
-int		print_menu_principal();
+int		print_this_menu(char buff[][50], int size);
 
 /*
 **  in file : rental.c
 */
 void	ft_rental_management(void);
-int		print_rental_menu();
 
 void	ft_visualizer_les_contrat();
 int		read_one_contrat(FILE *file, contrat *cntr);
@@ -93,7 +99,6 @@ void	get_client_info(client *cl);
 **  in file : cars.c
 */
 void	ft_cars_management(void);
-int		print_cars_menu(void);
 void	ft_list_cars();
 int		read_one_car_info(FILE *cars, voiture *car);
 void	ft_add_car(void);

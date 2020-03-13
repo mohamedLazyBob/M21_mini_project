@@ -1,38 +1,23 @@
 #include "mini_project.h"
 
-int		print_clients_menu()
-{
-	int	choice;
-
-	choice = 0;
-	do
-	{
-//		system("clear");
-		printf("\t\t -------------------------------\t\t\t\n");
-		printf("\t\t|\tGestion des Clients\t\t|\n");
-		printf("\t\t -------------------------------\t\t\t\n\n");
-		printf("\t -------------------------------------------------------\t\t\t\n");
-		printf("\t|\tList des clients................................1\t\t|\n");
-		printf("\t|\tAjouter client...................................2\t\t|\n");
-		printf("\t|\tModifier client.................................3\t\t|\n");
-		printf("\t|\tSupprimer client................................4\t\t|\n");
-		printf("\t|\tretour..........................................5\t\t|\n");
-		printf("\t -------------------------------------------------------\t\t\t\n");
-		printf("\t\t votre choix  :  ");
-		scanf("%d", &choice);
-	} while (choice < 1 || choice > 6);
-	return (choice);
-}
-
 
 void	ft_clients_management(void)
 {
 	int choice;
+	char buff[][50] = {
+		"    Gestion des Clients   ", 
+		"List des clients......................1", 
+		"Ajouter client........................2", 
+		"Modifier client.......................3", 
+		"Supprimer client......................4", 
+		"retour................................5"};
 
 	while (1)
 	{
-		choice = print_clients_menu();
-		if (choice == 1)		list_all_clients();
+		choice = print_this_menu(buff, 6);
+		if (choice == 0)
+			system("clear");
+		else if (choice == 1)	list_all_clients();
 		else if (choice == 2)	add_client();
 		else if (choice == 3)	modify_client();
 		else if (choice == 4)	del_client();

@@ -3,11 +3,20 @@
 void	ft_rental_management(void)
 {
 	int choice;
+	char buff[8][50] = {"Location   d'une   voiture", 
+		"Visualiser contrat....................1", 
+		"louer voiture.........................2", 
+		"Retourner voiture.....................3", 
+		"Modifier contrat......................4", 
+		"supprimer contrat.....................5", 
+		"retour................................6"};
 
 	while (1)
 	{
-		choice = print_rental_menu();
-		if (choice == 1)		ft_visualizer_les_contrat();
+		choice = print_this_menu(buff, 7);
+		if (choice == 0)
+			system("clear");
+		else if (choice == 1)	ft_visualizer_les_contrat();
 		else if (choice == 2)	louer_une_voiture();
 		else if (choice == 3)	retourner_une_voiture();
 		else if (choice == 4)	modifier_une_contrat();
@@ -15,38 +24,6 @@ void	ft_rental_management(void)
 		else if (choice == 6)	break ;
 	}
 }
-
-int		print_rental_menu()
-{
-	int	choice;
-
-	choice = 0;
-	do
-	{
-//		system("clear");
-		printf("\t\t -------------------------------\t\t\t\n");
-		printf("\t\t|\tLocation d'une voiture\t\t|\n");
-		printf("\t\t -------------------------------\t\t\t\n\n");
-		printf("\t -------------------------------------------------------\t\t\t\n");
-		printf("\t|\tVisualiser contrat..............................1\t\t|\n");
-		printf("\t|\tlouer voiture...................................2\t\t|\n");
-		printf("\t|\tRetourner voiture...............................3\t\t|\n");
-		printf("\t|\tModifier contrat................................4\t\t|\n");
-		printf("\t|\tsupprimer contrat...............................5\t\t|\n");
-		printf("\t|\tretour..........................................6\t\t|\n");
-		printf("\t -------------------------------------------------------\t\t\t\n");
-		printf("\t\t votre choix  :  ");
-		scanf("%d", &choice);
-	} while (choice < 1 || choice > 6);
-	return (choice);
-}
-
-//	float	numContrat;
-//	int		idVoiture;
-//	int		idClient;
-//	int		cout;
-//	date	debut;
-//	date	fin;
 
 /*
 ** **************************************************************************

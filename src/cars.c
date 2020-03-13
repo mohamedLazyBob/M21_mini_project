@@ -1,50 +1,25 @@
 #include "mini_project.h"
-//1) afficher la liste des voitures déjà enregistrées dans le fichier « Voitures » ; 
-//2) ajouter une nouvelle voiture dans le fichier « Voitures »; 
-//3) modifier les informations concernant une voiture déjà enregistrée ; 
-//4) de supprimer une voiture du fichier « Voitures »
-//5) retourner au menu principal.
 
 /*
 ** ****************************************************************************
 */
 
-int		print_cars_menu()
-{
-	int	choice;
-
-	choice = 0;
-	do
-	{
-		//system("clear");
-		printf("\t\t -------------------------------\t\t\t\n");
-		printf("\t\t|\tGestion des voiture\t\t|\n");
-		printf("\t\t -------------------------------\t\t\t\n\n");
-		printf("\t -------------------------------------------------------\t\t\t\n");
-		printf("\t|\tList des voitures.................................1\t\t|\n");
-		printf("\t|\tAjouter voiture...................................2\t\t|\n");
-		printf("\t|\tModifier voiture..................................3\t\t|\n");
-		printf("\t|\tsupprimer voiture.................................4\t\t|\n");
-		printf("\t|\tretour............................................5\t\t|\n");
-		printf("\t -------------------------------------------------------\t\t\t\n");
-		printf("\t\t votre choix  :  ");
-		scanf("%d", &choice);
-	} while (choice < 1 || choice > 6);
-	return (choice);
-}
-
-/*
-** ****************************************************************************
-*/
-
-void	ft_cars_management()
+void	ft_cars_management(void)
 {
 	int choice;
+	char buff[][50] = {"    Gestion des voiture   ", 
+		"List des voitures.....................1", 
+		"Ajouter voiture.......................2", 
+		"Modifier voiture......................3", 
+		"supprimer voiture.....................4", 
+		"retour................................5"};
 
 	do
 	{
-		choice = print_cars_menu();
-		if (choice == 1)
+		choice = print_this_menu(buff, 6);
+		if (choice == 0)
+			system("clear");
+		else if (choice == 1)
 			ft_list_cars();
 		else if (choice == 2)
 			ft_add_car();
