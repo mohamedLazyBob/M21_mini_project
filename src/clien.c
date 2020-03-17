@@ -196,13 +196,22 @@ void	del_this_client(int	id)
 
 void	print_one_client(client cl)
 {
-	printf("____________________________________\n");
-	printf("\tidClient  : %d\n", cl.idClient);
-	printf("\tnom       : %s\n", cl.nom);
-	printf("\tprenom    : %s\n", cl.prenom);
-	printf("\tcin       : %d\n", cl.cin);
-	printf("\tadresse   : %s\n", cl.adresse);
-	printf("\ttelephone : %12.12d\n", cl.telephone);
-	printf("____________________________________\n");
+	printf(G_UL G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ \
+		G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_UR ENDL);
+
+	printf("%-43s idClient  : %3d %40s\n", G_VERT, cl.idClient, G_VERT);
+
+	printf(G_ML G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ \
+		G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ \
+		G_T_HORZ G_T_HORZ G_MR ENDL);
+
+	printf("%s nom       : %-20s %s cin       : %20d    %s\n", \
+			G_VERT, cl.nom, G_VERT, cl.cin, G_VERT);
+	printf("%s prenom    : %-20s %s telephone : %20.12d    %3s\n", \
+			G_VERT, cl.prenom, G_VERT, cl.telephone, G_VERT);
+	printf("%s adresse   : %-20s %s %50s\n", G_VERT, cl.adresse, G_VERT, G_VERT);
+
+	printf(G_DL G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ\
+		G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_DR ENDL);
 
 }

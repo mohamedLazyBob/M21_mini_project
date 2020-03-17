@@ -39,16 +39,11 @@ void	ft_visualizer_les_contrat()
 		file = fopen("ContratsLocations", "w");
 		fclose(file);
 		file = fopen("ContratsLocations", "r");
-		//printf("ERROR, couldn't open contract file\n");
-		//return ;
 	}
 	while (read_one_contrat(file, &cntr) != EOF)
 		print_one_contrat(cntr);
 	fclose(file);
 }
-
-
-
 
 /*
 ** **************************************************************************
@@ -287,15 +282,24 @@ int		read_one_contrat(FILE *file, contrat *cntr)
 
 void	print_one_contrat(contrat contrat)
 {
-	printf("_________________________________\n");
-	printf("\tContrat num : %f.\n", contrat.numContrat);
-	printf("\tidVoiture   : %d\n", contrat.idClient);
-	printf("\tcout        : %d\n", contrat.cout);
-	printf("\tdebut       : %.2d:00, %.2d/%.2d/%.4d\n", \
-			contrat.debut.hh, contrat.debut.jour, contrat.debut.mois, contrat.debut.year);
-	printf("\tfin         : %d:00 %.2d/%.2d/%.4d\n", \
-			contrat.fin.hh, contrat.fin.jour, contrat.fin.mois, contrat.fin.year);
-	printf("_________________________________\n");
+	printf(G_UL G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ \
+		G_HORZ G_HORZ  G_HORZ G_HORZ G_HORZ  G_HORZ G_HORZ G_HORZ G_UR ENDL);
+	printf("%-30s Numéro de contrat : %4.4f %30s\n", \
+		G_VERT, contrat.numContrat, G_VERT);
+	printf(G_ML G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ \
+		G_T_HORZ  G_T_HORZ G_T_HORZ G_T_HORZ  G_T_HORZ G_T_HORZ G_T_HORZ G_MR ENDL);
+
+	printf("%s Voiture ID : %-14.4d %s Debut    : %.2d:00, %.2d/%.2d/%.4d %s\n", \
+		G_VERT, contrat.idVoiture, G_VERT, contrat.debut.hh, 
+		contrat.debut.jour, contrat.debut.mois, contrat.debut.year, G_VERT);
+
+	printf("%s Client ID  : %-14.4d %s Fin      : %.2d:00, %.2d/%.2d/%.4d %s\n", \
+		G_VERT, contrat.idClient, G_VERT, contrat.fin.hh, \
+		contrat.fin.jour, contrat.fin.mois, contrat.fin.year, G_VERT);
+	printf("%s cout       : %.4d %24s %43s\n", \
+		G_VERT, contrat.cout, G_VERT, G_VERT);
+	printf(G_DL G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ  G_HORZ G_HORZ \
+		G_HORZ G_HORZ G_HORZ G_HORZ  G_HORZ G_HORZ G_HORZ G_DR ENDL);
 }
 
 void	del_one_contrat(contrat cntr)

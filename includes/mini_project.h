@@ -7,13 +7,26 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#define  HORZ	"\u2501\u2501\u2501\u2501"
-#define  VERT	"\u2503"
-#define  UL	"\u250F"
-#define  UR	"\u2513"
-#define  DL	"\u2517"
-#define  DR	"\u251B"
+#define  HORZ	"\e[0;36m\u2501\u2501\u2501\u2501\e[0m"
+#define  T_HORZ	"\e[0;36m\u2500\u2500\u2500\u2500\e[0m"
+#define  VERT	"\e[0;36m\u2503\e[0m"
+#define  UL	"\e[0;36m\u250F\e[0m"
+#define  ML	"\e[0;36m\u2520\e[0m"
+#define  UR	"\e[0;36m\u2513\e[0m"
+#define  MR	"\e[0;36m\u2528\e[0m"
+#define  DL	"\e[0;36m\u2517\e[0m"
+#define  DR	"\e[0;36m\u251B\e[0m"
 #define	 ENDL	   "\n"
+
+#define  G_HORZ	"\e[0;32m\u2501\u2501\u2501\u2501\e[0m"
+#define  G_T_HORZ	"\e[0;32m\u2500\u2500\u2500\u2500\e[0m"
+#define  G_VERT	"\e[0;32m\u2503\e[0m"
+#define  G_UL	"\e[0;32m\u250F\e[0m"
+#define  G_ML	"\e[0;32m\u2520\e[0m"
+#define  G_UR	"\e[0;32m\u2513\e[0m"
+#define  G_MR	"\e[0;32m\u2528\e[0m"
+#define  G_DL	"\e[0;32m\u2517\e[0m"
+#define  G_DR	"\e[0;32m\u251B\e[0m"
 
 typedef struct	date
 {
@@ -37,9 +50,9 @@ typedef struct	Voiture
 typedef	struct	contratLocation
 {
 	float	numContrat;
-	int		idVoiture;
-	int		idClient;
-	int		cout;
+	int	idVoiture;
+	int	idClient;
+	int	cout;
 	date	debut;
 	date	fin;
 }				contrat;
@@ -49,10 +62,10 @@ typedef	struct	client
 	char	nom[20];
 	char	prenom[20];
 	char	adresse[15];
-	int		cin;
-	int		idClient;
-	int		telephone;
-}				client;
+	int	cin;
+	int	idClient;
+	int	telephone;
+}		client;
  
 /*
 **  in file : main.c
@@ -100,7 +113,8 @@ void	get_client_info(client *cl);
 */
 void	ft_cars_management(void);
 void	ft_list_cars();
-int		read_one_car_info(FILE *cars, voiture *car);
+int	read_one_car_info(FILE *cars, voiture *car);
+void	print_one_car(voiture car);
 void	ft_add_car(void);
 void	ft_add_this_car(voiture car, char *filename);
 void	get_car_input(voiture *car);
