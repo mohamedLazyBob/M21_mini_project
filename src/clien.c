@@ -14,10 +14,9 @@ void	ft_clients_management(void)
 
 	while (1)
 	{
+		system("clear");
 		choice = print_this_menu(buff, 6);
-		if (choice == 0)
-			system("clear");
-		else if (choice == 1)	list_all_clients();
+		if (choice == 1)	list_all_clients();
 		else if (choice == 2)	add_client();
 		else if (choice == 3)	modify_client();
 		else if (choice == 4)	del_client();
@@ -29,6 +28,7 @@ void	ft_clients_management(void)
 void	list_all_clients()
 {
 	client	cl;
+	int	ret;
 	FILE	*fileptr = fopen("Clients", "r");
 
 	if (fileptr == NULL)
@@ -36,6 +36,8 @@ void	list_all_clients()
 	while (read_one_client(&cl, fileptr) != EOF)
 		print_one_client(cl);
 	fclose(fileptr);
+	printf("write a number to go back to the menu : ");
+	scanf("%d", &ret);
 }
 
 /*
@@ -104,7 +106,6 @@ void	modify_client()
 				else if (choix == 3)	scanf("%d", &cl.cin);
 				else if (choix == 4)	scanf("%s", cl.adresse);
 				else if (choix == 5)	scanf("%d", &cl.telephone);
-
 				add_this_client(cl, "Clients");
 			}
 			else

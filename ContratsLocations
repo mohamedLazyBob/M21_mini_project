@@ -1,32 +1,18 @@
-<<
-1.000000
-1
-1
-1
-7 1 1 1
-22 1 1 1
-/>>
-<<
-2.000000
-2
-2
-2
-7 2 2 2
-7 2 2 2
-/>>
-<<
-4.000000
-4
-4
-4
-7 4 4 4
-44 4 4 4
-/>>
-<<
-3.000000
-3
-3
-123
-7 15 3 2020
-22 20 3 2020
-/>>
+<contart>
+	<numcontrat> 2.000000 </numcontrat>
+	<idVoiture> 2 </idVoiture>
+	<idClient> 2 </idClient>
+	<cout> 2 </cout>
+	<date_debut>
+		<hh> 0 </hh>
+		<jour> 2 </jour>
+		<mois> 2 </mois>
+		<year> 2 </year>
+	</date_debut>
+	<date_fin>
+		<hh> 0 </hh>
+		<jour> 4 </jour>
+		<mois> 4 </mois>
+		<year> 4 </year>
+	</date_fin>
+</contrat>

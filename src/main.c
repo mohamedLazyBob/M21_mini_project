@@ -17,7 +17,6 @@ int	print_this_menu(char buff[][50], int size)
 		printf("%s                                                %s\n", VERT, VERT);
 		while (idx < size)
 			printf("%s     %s    %s\n", VERT, buff[idx++], VERT);
-		printf("%s       pour vider l'ecran ...............0      %s\n", VERT, VERT);
 		printf("%s                                                %s\n", VERT, VERT);
 		printf(DL HORZ HORZ HORZ  HORZ HORZ  HORZ HORZ  HORZ HORZ HORZ HORZ HORZ DR ENDL);
 		printf("\t\t votre choix : ");
@@ -42,10 +41,9 @@ int		main(void)
 
 	do
 	{
+		system("clear");
 		choice = print_this_menu(buff, 5);
-		if (choice == 0)
-			system("clear");
-		else if (choice == 1)
+		if (choice == 1)
 			ft_rental_management();
 	   	else if (choice == 2)
 	   		ft_cars_management();

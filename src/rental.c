@@ -13,15 +13,16 @@ void	ft_rental_management(void)
 
 	while (1)
 	{
+		system("clear");
 		choice = print_this_menu(buff, 7);
-		if (choice == 0)
-			system("clear");
-		else if (choice == 1)	ft_visualizer_les_contrat();
+		if (choice == 1)	ft_visualizer_les_contrat();
 		else if (choice == 2)	louer_une_voiture();
 		else if (choice == 3)	retourner_une_voiture();
 		else if (choice == 4)	modifier_une_contrat();
 		else if (choice == 5)	sup_une_contrat();
 		else if (choice == 6)	break ;
+		printf("saisir 0 pour revenir au menu precedent : ");
+		scanf("%d", &choice);
 	}
 }
 
@@ -54,9 +55,10 @@ void	louer_une_voiture()
 	contrat	cntr;
 
 	get_contrat_input(&cntr);
-	//verify_this_contrat(cntr);
+	if (verify_this_contrat(cntr) == -1)
+		return ;
 	add_this_contrat(cntr, "ContratsLocations");
-	modifier_car_enLocation(cntr.idVoiture, "Yes");
+	modifier_car_enLocation(cntr.idVoiture, "Oui");
 }
 
 void	get_contrat_input(contrat *cntr)
@@ -71,6 +73,65 @@ void	get_contrat_input(contrat *cntr)
 		&cntr->debut.hh, &cntr->debut.jour, &cntr->debut.mois, &cntr->debut.year);
 	printf("fin            : ");	scanf("%d %d %d %d",   \
 		&cntr->fin.hh, &cntr->fin.jour, &cntr->fin.mois, &cntr->fin.year);
+}
+
+/*
+** **************************************************************************
+*/
+
+int	verify_this_contrat(contrat cntr)
+{
+
+	FILE	*ptr = NULL;
+	voiture	car_var = {};
+	client	client_var = {};
+	int 	end = 0;
+	
+	if (!(ptr = fopen("Voitures", "r")))
+	{
+		printf("error while opening voitures file.\n");
+		exit (1);
+	}
+	car_var.idVoiture = -1;
+	while (1)
+	{
+		end = read_one_car_info(ptr, &car_var);
+		if (end == EOF || cntr.idVoiture == car_var.idVoiture)
+			break;
+	}
+	if (cntr.idVoiture != car_var.idVoiture)
+	{
+		//check if the car id is valid 
+		printf("ERROR : there is no car with this Id.\n");
+		return (-1);
+	}
+	else if ((cntr.idVoiture == car_var.idVoiture) && (strcmp(car_var.EnLocation, "Non") != 0))
+	{
+		//check if car is already rented
+		printf("ERROR : the car is already rented.\n");
+		return (-1);
+	}
+	fclose(ptr);
+
+	//check if the client id is valid
+	if (!(ptr = fopen("Clients", "r")))
+	{
+		printf("ERROR while opening Clients file.\n");
+		exit (1);
+	}
+	client_var.idClient = -1;
+	while (1)
+	{
+		end = read_one_client(&client_var, ptr);
+		if (end == EOF || client_var.idClient == cntr.idClient)
+			break ;
+	}
+	if (client_var.idClient != cntr.idClient)
+	{
+		printf("ERROR : No such client id.\n");
+		return (-1);
+	}
+	return (1);
 }
 
 /*
@@ -92,7 +153,8 @@ void	retourner_une_voiture()
 		{
 			fclose(file);
 			modifier_car_enLocation(cntr.idVoiture, "Non");
-			del_one_contrat(cntr);
+			del_this_contrat(cntr.numContrat);
+			//del_one_contrat(cntr);
 			return ;
 		}
 	}
@@ -127,7 +189,8 @@ void	modifier_une_contrat()
 			fclose(file);
 			if (choix >= 1 && choix <= 5)
 			{
-				del_one_contrat(cntr);
+				//del_one_contrat(cntr);
+				del_this_contrat(cntr.numContrat);
 				printf("saisir la modification : ");
 				if (choix == 1)			scanf("%d", &(cntr.idVoiture));
 				else if (choix == 2)	scanf("%d", &(cntr.idClient));
@@ -146,8 +209,8 @@ void	modifier_une_contrat()
 						&(cntr.fin.hh), &(cntr.fin.jour), \
 						&(cntr.fin.mois), &(cntr.fin.year));
 				}
-				printf("going to add this contrat : \n");
-				print_one_contrat(cntr);
+//				printf("going to add this contrat : \n");
+//				print_one_contrat(cntr);
 				add_this_contrat(cntr, "ContratsLocations");
 				return ;
 			}
@@ -202,6 +265,8 @@ void	sup_une_contrat()
 		if (ret == EOF)
 		{
 			printf("this id doesn't exist.\n");
+			fclose(cars);
+			fclose(file);
 			return ;
 		}
 		if (contrat.idVoiture == id)
@@ -216,7 +281,7 @@ void	sup_une_contrat()
 			{
 				fclose(cars);
 				fclose(file);
-				del_one_contrat(contrat);
+				del_this_contrat(contrat.numContrat);
 				return ;
 			}
 			else
@@ -240,42 +305,58 @@ void	add_this_contrat(contrat cntr, char *filename)
 {
 	FILE	*file = fopen (filename, "a+");
 
-	fprintf(file, "<<\n");
-	fprintf(file, "%f\n", cntr.numContrat);
-	fprintf(file, "%d\n", cntr.idVoiture);
-	fprintf(file, "%d\n", cntr.idClient);
-	fprintf(file, "%d\n", cntr.cout);
-	fprintf(file, "%d %d %d %d\n", \
-			cntr.debut.hh, cntr.debut.jour, cntr.debut.mois, cntr.debut.year);
-	fprintf(file, "%d %d %d %d\n", \
-			cntr.fin.hh, cntr.fin.jour, cntr.fin.mois, cntr.fin.year);
-	fprintf(file, "/>>\n");
+	fprintf(file, "<contart>\n");
+
+	fprintf(file, "\t<numcontrat> %f </numcontrat>\n", cntr.numContrat);
+	fprintf(file, "\t<idVoiture> %d </idVoiture>\n", cntr.idVoiture);
+	fprintf(file, "\t<idClient> %d </idClient>\n", cntr.idClient);
+	fprintf(file, "\t<cout> %d </cout>\n", cntr.cout);
+
+	fprintf(file, "\t<date_debut>\n");
+	fprintf(file, "\t\t<hh> %d </hh>\n", 	 cntr.debut.hh);
+	fprintf(file, "\t\t<jour> %d </jour>\n", cntr.debut.jour);
+	fprintf(file, "\t\t<mois> %d </mois>\n", cntr.debut.mois);
+	fprintf(file, "\t\t<year> %d </year>\n", cntr.debut.year);
+	fprintf(file, "\t</date_debut>\n");
+
+	fprintf(file, "\t<date_fin>\n");
+	fprintf(file, "\t\t<hh> %d </hh>\n",     cntr.fin.hh);
+	fprintf(file, "\t\t<jour> %d </jour>\n", cntr.fin.jour);
+	fprintf(file, "\t\t<mois> %d </mois>\n", cntr.fin.mois);
+	fprintf(file, "\t\t<year> %d </year>\n", cntr.fin.year);
+	fprintf(file, "\t</date_fin>\n");
+
+	fprintf(file, "</contrat>\n");
+
 	fclose(file);
 }
 
 int		read_one_contrat(FILE *file, contrat *cntr)
 {
 	int		ret;
-	char	line[10];
-	//static int i;
+	char		line[20];
 
-	//printf("read i == %d;\n", i++);
-	ret = fscanf(file, "%s\n",    line);
-	if (ret == EOF)	return (ret);
-	ret = fscanf(file, "%f\n",  &(cntr->numContrat));
-	if (ret == EOF)	return (ret);
-	ret = fscanf(file, "%d\n",  &(cntr->idVoiture));
-	if (ret == EOF)	return (ret);
-	ret = fscanf(file, "%d\n",  &(cntr->idClient));
-	if (ret == EOF)	return (ret);
-	ret = fscanf(file, "%d\n",  &(cntr->cout));
-	if (ret == EOF)	return (ret);
-	ret = fscanf(file, "%d %d %d %d\n",   \
-				&cntr->debut.hh, &cntr->debut.jour, &cntr->debut.mois, &cntr->debut.year);
-	if (ret == EOF)	return (ret);
-	ret = fscanf(file, "%d %d %d %d\n",   \
-				&cntr->fin.hh, &cntr->fin.jour, &cntr->fin.mois, &cntr->fin.year);
-	if (ret == EOF)	return (ret);
+	fscanf(file, "%s\n",    line);
+
+	fscanf(file, "<numcontrat> %f </numcontrat>\n", &(cntr->numContrat));
+	fscanf(file, "<idVoiture> %d </idVoiture>\n",   &(cntr->idVoiture));
+	fscanf(file, "<idClient> %d </idClient>\n", 	&(cntr->idClient));
+	fscanf(file, "<cout> %d </cout>\n", 		&(cntr->cout));
+
+	fscanf(file, "%s\n", line);
+	fscanf(file, "<hh> %d </hh>\n",		&(cntr->debut.hh));
+	fscanf(file, "<jour> %d </jour>\n",	&(cntr->debut.jour));
+	fscanf(file, "<mois> %d </mois>\n",	&(cntr->debut.mois));
+	fscanf(file, "<year> %d </year>\n",	&(cntr->debut.year));
+	fscanf(file, "%s\n", line);
+
+	fscanf(file, "%s\n", line);
+	fscanf(file, "<hh> %d </hh>\n",		&(cntr->fin.hh));
+	fscanf(file, "<jour> %d </jour>\n",	&(cntr->fin.jour));
+	fscanf(file, "<mois> %d </mois>\n",	&(cntr->fin.mois));
+	fscanf(file, "<year> %d </year>\n",	&(cntr->fin.year));
+	fscanf(file, "%s\n", line);
+
 	ret = fscanf(file, "%s\n", line);
 	return (ret);
 }
@@ -283,11 +364,13 @@ int		read_one_contrat(FILE *file, contrat *cntr)
 void	print_one_contrat(contrat contrat)
 {
 	printf(G_UL G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ \
-		G_HORZ G_HORZ  G_HORZ G_HORZ G_HORZ  G_HORZ G_HORZ G_HORZ G_UR ENDL);
+		G_HORZ G_HORZ  G_HORZ G_HORZ G_HORZ  G_HORZ G_HORZ G_HORZ \
+		G_UR ENDL);
 	printf("%-30s Numéro de contrat : %4.4f %30s\n", \
 		G_VERT, contrat.numContrat, G_VERT);
-	printf(G_ML G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ \
-		G_T_HORZ  G_T_HORZ G_T_HORZ G_T_HORZ  G_T_HORZ G_T_HORZ G_T_HORZ G_MR ENDL);
+	printf(G_ML G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ \
+		G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ  G_T_HORZ G_T_HORZ \
+		G_T_HORZ  G_T_HORZ G_T_HORZ G_T_HORZ G_MR ENDL);
 
 	printf("%s Voiture ID : %-14.4d %s Debut    : %.2d:00, %.2d/%.2d/%.4d %s\n", \
 		G_VERT, contrat.idVoiture, G_VERT, contrat.debut.hh, 
@@ -302,11 +385,11 @@ void	print_one_contrat(contrat contrat)
 		G_HORZ G_HORZ G_HORZ G_HORZ  G_HORZ G_HORZ G_HORZ G_DR ENDL);
 }
 
-void	del_one_contrat(contrat cntr)
+void	del_this_contrat(int idContrat)
 {
-	FILE	*ptr1, *ptr2;
 	contrat	temp_cntr;
-	int tmp;
+	FILE	*ptr1;
+	FILE	*ptr2;
 
 	ptr1 = fopen("ContratsLocations", "r");
 	ptr2 = fopen("cntr_replica.txt", "w");
@@ -314,10 +397,9 @@ void	del_one_contrat(contrat cntr)
 
 	while (1)
 	{
-		tmp = read_one_contrat(ptr1, &temp_cntr);
-		if (tmp == EOF)
+		if (read_one_contrat(ptr1, &temp_cntr) == EOF)
 			break ;
-		if (tmp != EOF && temp_cntr.numContrat != cntr.numContrat)
+		if (temp_cntr.numContrat != idContrat)
 			add_this_contrat(temp_cntr, "cntr_replica.txt");
 	}
 	fclose(ptr1);

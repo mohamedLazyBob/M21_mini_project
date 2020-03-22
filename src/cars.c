@@ -16,9 +16,9 @@ void	ft_cars_management(void)
 		"retour................................5"};
 	do
 	{
+		system("clear");
 		choice = print_this_menu(buff, 6);
-		if (choice == 0)	system("clear");
-		else if (choice == 1)	ft_list_cars();
+		if (choice == 1)	ft_list_cars();
 		else if (choice == 2)	ft_add_car();
 		else if(choice == 3)	ft_modify_car_info();
 		else if(choice == 4)	ft_delete_car();
@@ -45,6 +45,8 @@ void	ft_list_cars()
 	while ((ret = read_one_car_info(file, &car)) != EOF)
 		print_one_car(car);
 	fclose(file);
+	printf("write a number to go back to the menu : ");
+	scanf("%d", &ret);
 }
 
 /*
@@ -114,22 +116,13 @@ void	ft_add_car(void)
 void	get_car_input(voiture *car)
 {
 	printf("please write the information of this car:\n");
+	printf("nomVoiture: "); scanf("%s", car->nomVoiture);
+	printf("idVoiture:  "); scanf("%d", &(car->idVoiture));
+	printf("marque:     "); scanf("%s", car->marque);
 	printf("nbplaces:   "); scanf("%d",   &(car->nbplaces));
-	printf("\nprixJour:   "); scanf("%d", &(car->prixJour));
-	printf("\nidVoiture:  "); scanf("%d", &(car->idVoiture));
-	printf("\nmarque:     "); scanf("%s", car->marque);
-	printf("\ncouleur:    "); scanf("%s", car->couleur);
-	printf("\nnomVoiture: "); scanf("%s", car->nomVoiture);
-	printf("\nEnLocation: "); scanf("%s", car->EnLocation);
-
-	if ((strcmp(car->EnLocation, "OUI") == 0) || \
-			(strcmp(car->EnLocation, "YES") == 0) || \
-			(strcmp(car->EnLocation, "oui") == 0))
-		strcpy(car->EnLocation, "Oui"); 
-	if ((strcmp(car->EnLocation, "NON") == 0) || \
-			(strcmp(car->EnLocation, "NO") == 0) || \
-			(strcmp(car->EnLocation, "non") == 0))
-		strcpy(car->EnLocation, "Non"); 
+	printf("couleur:    "); scanf("%s", car->couleur);
+	printf("prixJour:   "); scanf("%d", &(car->prixJour));
+	strcpy(car->EnLocation, "Non"); 
 }
 
 /*
@@ -179,8 +172,16 @@ void	ft_modify_car_info()
 			else if (choice == 3)	car.idVoiture = nbr;
 			else if (choice == 4)	strcpy(car.marque, str);
 			else if (choice == 5) 	strcpy(car.couleur, str);
-			else if (choice == 6) 	strcpy(car.nomVoiture, str);
-			else if (choice == 7) 	strcpy(car.EnLocation, str);
+			else if (choice == 6)	strcpy(car.nomVoiture, str);
+			else if (choice == 7)
+			{
+				if ((strcmp(str, "non") == 0) || \
+					(strcmp(str, "NON") == 0) || (strcmp(str, "NO") == 0) || \
+					(strcmp(str, "no") == 0) || (strcmp(str, "Non") == 0))
+					strcpy(car.EnLocation, "Non");
+				else
+					strcpy(car.EnLocation, "Yes");
+			}
 			file = fopen("Voitures", "a+");
 			ft_add_this_car(car, "Voitures");
 			break;
