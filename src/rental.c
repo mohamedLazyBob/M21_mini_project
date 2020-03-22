@@ -154,7 +154,6 @@ void	retourner_une_voiture()
 			fclose(file);
 			modifier_car_enLocation(cntr.idVoiture, "Non");
 			del_this_contrat(cntr.numContrat);
-			//del_one_contrat(cntr);
 			return ;
 		}
 	}
@@ -167,34 +166,33 @@ void	retourner_une_voiture()
 
 void	modifier_une_contrat()
 {
-	FILE	*file = fopen("ContratsLocations", "r");
 	float	contrat_id;
-	int		choix;
-	int		tmp;
+	int	choix;
 	contrat	cntr;
+	FILE	*file;
 
-	if (file == NULL)
+	if (!(file = fopen("ContratsLocations", "r")))
 	{
 		printf("A BIIIG FAT PROBLEM\n");
-		//exit(0);
 	}
 	get_contrat_modification(&contrat_id, &choix);
-	printf("you have choosed\tid : %f. choix : %d\n", contrat_id, choix);
-
 	while (1)
 	{
-		tmp = read_one_contrat(file, &cntr);
-		if (tmp != EOF && contrat_id == cntr.numContrat)
+		if (EOF == read_one_contrat(file, &cntr))
+			break ;
+		if (contrat_id == cntr.numContrat)
 		{
 			fclose(file);
 			if (choix >= 1 && choix <= 5)
 			{
-				//del_one_contrat(cntr);
 				del_this_contrat(cntr.numContrat);
 				printf("saisir la modification : ");
-				if (choix == 1)			scanf("%d", &(cntr.idVoiture));
-				else if (choix == 2)	scanf("%d", &(cntr.idClient));
-				else if (choix == 3)	scanf("%d", &(cntr.cout));
+				if (choix == 1)
+					scanf("%d", &(cntr.idVoiture));
+				else if (choix == 2)
+					scanf("%d", &(cntr.idClient));
+				else if (choix == 3)
+					scanf("%d", &(cntr.cout));
 				else if (choix == 4)
 				{
 					printf("\ndebut in this format hh dd/mm/yy : ");
@@ -209,8 +207,6 @@ void	modifier_une_contrat()
 						&(cntr.fin.hh), &(cntr.fin.jour), \
 						&(cntr.fin.mois), &(cntr.fin.year));
 				}
-//				printf("going to add this contrat : \n");
-//				print_one_contrat(cntr);
 				add_this_contrat(cntr, "ContratsLocations");
 				return ;
 			}
@@ -218,8 +214,6 @@ void	modifier_une_contrat()
 				printf("choix invalid\n");
 			return ;
 		}
-		if (tmp == EOF)
-			break ;
 	}
 	fclose(file);
 }
@@ -228,21 +222,15 @@ void	get_contrat_modification(float *contrat_id, int *choix)
 {
 	printf("Donner l'id de le contrat tu veut modifer : ");
 	scanf("%f", contrat_id);
-	printf("\tque voulez-vous modifier?\n");
+	printf("que voulez-vous modifier?\n");
 	printf("\tidVoiture...............1\n");
 	printf("\tidClient................2\n");
 	printf("\tcout....................3\n");
 	printf("\tdebut...................4\n");
 	printf("\tfin.....................5\n");
-	printf("\t\tvotre choix :  ");	scanf("%d", choix);
+	printf("\t\tvotre choix :  ");
+	scanf("%d", choix);
 }
-
-//	float	numContrat;
-//	int		idVoiture;
-//	int		idClient;
-//	int		cout;
-//	date	debut;
-//	date	fin;
 
 /*
 ** **************************************************************************
@@ -250,26 +238,26 @@ void	get_contrat_modification(float *contrat_id, int *choix)
 
 void	sup_une_contrat()
 {
+	contrat		contrat;
+	FILE		*file;
+	FILE		*cars;
+	voiture		car;
 	int		id;
-	int		ret;
-	voiture car;
-	contrat	contrat;
-	FILE	*cars = fopen("Voitures", "r");
-	FILE	*file = fopen("ContratsLocations", "r");
 
-	printf("donnez l'id du contrat que vous souhaitez supprimer : ");
+	cars = fopen("Voitures", "r");
+	file = fopen("ContratsLocations", "r");
+	printf("Donnez le nome du contrat que vous souhaitez supprimer : ");
 	scanf("%d", &id);
 	while (1)
 	{
-		ret = read_one_contrat(file, &contrat);	
-		if (ret == EOF)
+		if (EOF == read_one_contrat(file, &contrat))
 		{
-			printf("this id doesn't exist.\n");
+			printf("this Contrat Doesn't exist.\n");
 			fclose(cars);
 			fclose(file);
 			return ;
 		}
-		if (contrat.idVoiture == id)
+		if (contrat.numContrat == id)
 			break;
 	}
 	while (1)
