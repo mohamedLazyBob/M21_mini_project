@@ -1,63 +1,27 @@
-<
-4
-4
-4
-4
-4
-4
-Non
-/>
-<
-7
-7
-7
-7
-7
-7
-Non
-/>
-<
-3
-3
-3
-3
-3
-3
-Non
-/>
-<
-5
-5
-5
-5
-5
-5
-Non
-/>
-<
-6
-6
-6
-6
-6
-6
-Non
-/>
-<
-2
-2
-2
-2
-2
-2
-Oui
-/>
-<
-1
-1
-1
-1
-1
-1
-Non
-/>
+<car>
+<nomVoiture> 2 </nomVoiture>
+<idVoiture> 2 </idVoiture>
+<nbplaces> 2 </nbplaces>
+<prixJour> 2 </prixJour>
+<marque> 2 </marque>
+<couleur> 2 </couleur>
+<enLocation> Non </enLocation>
+</car>
+<car>
+<nomVoiture> ljsladkfjlajsdf </nomVoiture>
+<idVoiture> 2 </idVoiture>
+<nbplaces> -2007055840 </nbplaces>
+<prixJour> 21898 </prixJour>
+<marque> lsakjdflkajslkd </marque>
+<couleur> jlsajdf </couleur>
+<enLocation> Non </enLocation>
+</car>
+<car>
+<nomVoiture> 1 </nomVoiture>
+<idVoiture> 1 </idVoiture>
+<nbplaces> 1 </nbplaces>
+<prixJour> 1 </prixJour>
+<marque> 1 </marque>
+<couleur> 1 </couleur>
+<enLocation> Oui </enLocation>
+</car>

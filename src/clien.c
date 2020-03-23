@@ -4,6 +4,7 @@
 void	ft_clients_management(void)
 {
 	int choice;
+	char str[100];
 	char buff[][50] = {
 		"    Gestion des Clients   ", 
 		"List des clients......................1", 
@@ -21,30 +22,44 @@ void	ft_clients_management(void)
 		else if (choice == 3)	modify_client();
 		else if (choice == 4)	del_client();
 		else if (choice == 5)	break ;
+		printf("saisir un chiffre pour revenir au menu precedent : ");
+		scanf("%s", str);
 	}
 }
 
 
-void	list_all_clients()
+void	list_all_clients(void)
 {
-	client	cl;
+	FILE	*fileptr;
 	int	ret;
-	FILE	*fileptr = fopen("Clients", "r");
+	client	cl;
 
-	if (fileptr == NULL)
+	if (!(fileptr = fopen("Clients", "r")))
+	{
+		printf("ERROR: Clients file doesn't exist.\n");
 		return ;
+	}
 	while (read_one_client(&cl, fileptr) != EOF)
 		print_one_client(cl);
 	fclose(fileptr);
-	printf("write a number to go back to the menu : ");
-	scanf("%d", &ret);
 }
 
 /*
 **	**************************************************************************
 */
 
-void	add_client()
+void	get_client_info(client *cl)
+{
+	printf("Saisir les informations du nouveau client : \n");
+	printf("IdClient   : ");	scanf("%d", &cl->idClient);
+	printf("Nom        : ");	scanf("%19s", cl->nom);
+	printf("Prenom     : ");	scanf("%19s", cl->prenom);
+	printf("Cin        : ");	scanf("%d", &cl->cin);
+	printf("Adresse    : ");	scanf("%14s", cl->adresse);
+	printf("Telephone  : ");	scanf("%d", &cl->telephone);
+}
+
+void	add_client(void)
 {
 	client	cl;
 
@@ -52,37 +67,31 @@ void	add_client()
 	add_this_client(cl, "Clients");
 }
 
-void	get_client_info(client *cl)
-{
-	printf("please write the information of the new client : \n");
-	printf("idClient   : ");	scanf("%d", &cl->idClient);
-	printf("nom        : ");	scanf("%s", cl->nom);
-	printf("prenom     : ");	scanf("%s", cl->prenom);
-	printf("cin        : ");	scanf("%d", &cl->cin);
-	printf("adresse    : ");	scanf("%s", cl->adresse);
-	printf("Telephone  : ");	scanf("%d", &cl->telephone);
-}
 /*
-**	**************************************************************************
+** ***************************************************************************
 */
 
-void	modify_client()
+void	modify_client(void)
 {
-	int		id;
-	int		choix;
-	int		ret;
-	FILE	*file = fopen("Clients", "r");
+	FILE	*file;
+	int	choix;
+	int	ret;
+	int	id;
 	client	cl;
 
-	printf("Donner l'id du client : ");	scanf("%d", &id);
-
-	printf("saisir la modification : ");
-	printf("\tque voulez-vous modifier?\n");
-	printf("\nnom................1\n");
-	printf("\tprenom.............2\n");
-	printf("\tcin................3\n");
-	printf("\tadresse............4\n");
-	printf("\ttelephone..........5\n");
+	if (!(file = fopen("Clients", "r")))
+	{
+		printf("ERROR: Clients file doesn't exist.\n");
+		return ;
+	}
+	printf("Donner l'id du client : ");
+	scanf("%d", &id);
+	printf("\tQue voulez-vous modifier?\n");
+	printf("\tNom................1\n");
+	printf("\tPrenom.............2\n");
+	printf("\tCin................3\n");
+	printf("\tAdresse............4\n");
+	printf("\tTelephone..........5\n");
 	printf("\t\tvotre choix :  ");	scanf("%d", &choix);
 
 	while (1)
@@ -101,10 +110,10 @@ void	modify_client()
 				del_this_client(cl.idClient);
 				
 				printf("saisir la modification : ");
-				if (choix == 1)			scanf("%s", cl.nom);
-				else if (choix == 2)	scanf("%s", cl.prenom);
+				if (choix == 1)		scanf("%19s\n", cl.nom);
+				else if (choix == 2)	scanf("%19s", cl.prenom);
 				else if (choix == 3)	scanf("%d", &cl.cin);
-				else if (choix == 4)	scanf("%s", cl.adresse);
+				else if (choix == 4)	scanf("%14s", cl.adresse);
 				else if (choix == 5)	scanf("%d", &cl.telephone);
 				add_this_client(cl, "Clients");
 			}
@@ -117,71 +126,81 @@ void	modify_client()
 }
 
 /*
-**	**************************************************************************
+** ***************************************************************************
 */
 
-void	del_client()
+void	del_client(void)
 {
-	int		id;
+	int	id;
 
-	printf("Donner l'id du contrat que vous souhaitez supprimer : ");
+	printf("Saisir l'id du contrat que vous souhaitez supprimer : ");
 	scanf("%d", &id);
 	del_this_client(id);
 }
 
 /*
-**	**************************************************************************
-**	**************************************************************************
+** ***************************************************************************
 */
 
 void	add_this_client(client cl, char *filename)
 {
-	FILE	*file = fopen(filename, "a+");
+	FILE	*file;
 
-	fprintf(file, "<<\n");	
-	fprintf(file, "%d\n", cl.idClient);	
-	fprintf(file, "%s\n", cl.nom);	
-	fprintf(file, "%s\n", cl.prenom);	
-	fprintf(file, "%d\n", cl.cin);	
-	fprintf(file, "%s\n", cl.adresse);	
-	fprintf(file, "%d\n", cl.telephone);	
-	fprintf(file, "/>>\n");	
+	if (!(file = fopen(filename, "a+")))
+	{
+		file = fopen(filename, "w");
+		fclose(file);
+		file = fopen(filename, "a+");
+	}
+	fprintf(file, "<client>\n");	
+	fprintf(file, "<idClient> %d </idClient>\n", cl.idClient);	
+	fprintf(file, "<nom> %20.20s </nom>\n", cl.nom);	
+	fprintf(file, "<prenom> %20.20s </prenom>\n", cl.prenom);	
+	fprintf(file, "<cin> %d </cin>\n", cl.cin);	
+	fprintf(file, "<adresse> %15.15s </adresse>\n", cl.adresse);	
+	fprintf(file, "<telephone> %d </telephone>\n", cl.telephone);	
+	fprintf(file, "</client>\n");
 	fclose(file);
 }
 
+/*
+** ***************************************************************************
+*/
+
 int	read_one_client(client *cl, FILE *file)
 {
-	int ret;
-	char line[10];
+	char	line[10];
+	int	ret;
 
-	ret = fscanf(file, "%s\n", line);
-	if (ret == EOF)	return (ret);
-	ret = fscanf(file, "%d\n", &cl->idClient);
-	if (ret == EOF)	return (ret);
-	ret = fscanf(file, "%s\n", cl->nom);
-	if (ret == EOF)	return (ret);
-	ret = fscanf(file, "%s\n", cl->prenom);
-	if (ret == EOF)	return (ret);
-	ret = fscanf(file, "%d\n", &cl->cin);
-	if (ret == EOF)	return (ret);
-	ret = fscanf(file, "%s\n", cl->adresse);
-	if (ret == EOF)	return (ret);
-	ret = fscanf(file, "%d\n", &cl->telephone);
-	if (ret == EOF)	return (ret);
+	fscanf(file, "%s\n", line);
+	fscanf(file, "<idClient> %d </idClient>\n", &(cl->idClient));	
+	fscanf(file, "<nom> %20s </nom>\n", cl->nom);	
+	fscanf(file, "<prenom> %20s </prenom>\n", cl->prenom);	
+	fscanf(file, "<cin> %d </cin>\n", &(cl->cin));
+	fscanf(file, "<adresse> %15s </adresse>\n", cl->adresse);	
+	fscanf(file, "<telephone> %d </telephone>\n", &(cl->telephone));	
 	ret = fscanf(file, "%s\n", line);
 	return (ret);
 }
 
-void	del_this_client(int	id)
-{
-	FILE	*ptr1, *ptr2;
-	client	temp_client;
-	int tmp;
+/*
+** ***************************************************************************
+*/
 
-	ptr1 = fopen("Clients", "r");
+void	del_this_client(int id)
+{
+	client	temp_client;
+	FILE	*ptr1;
+	FILE	*ptr2;
+	int	tmp;
+
+	if (!(ptr1 = fopen("Clients", "r")))
+	{
+		printf("ERROR: clients file doesn't exist.\n");
+		return ;
+	}
 	ptr2 = fopen("clients_replica.txt", "w");
 	fclose(ptr2);
-
 	while (1)
 	{
 		tmp = read_one_client(&temp_client, ptr1);
@@ -195,24 +214,30 @@ void	del_this_client(int	id)
 	rename("clients_replica.txt", "Clients");
 }
 
+/*
+** ***************************************************************************
+*/
+
 void	print_one_client(client cl)
 {
-	printf(G_UL G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ \
+	printf(G_UL G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ \
+		G_HORZ G_HORZ G_HORZ \
 		G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_UR ENDL);
-
-	printf("%-43s idClient  : %3d %40s\n", G_VERT, cl.idClient, G_VERT);
-
-	printf(G_ML G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ \
-		G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ \
-		G_T_HORZ G_T_HORZ G_MR ENDL);
-
-	printf("%s nom       : %-20s %s cin       : %20d    %s\n", \
+	printf("%-43s idClient  : %-13d %30s\n", G_VERT, cl.idClient, G_VERT);
+	printf(G_ML G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ \
+		G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ \
+		G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_T_HORZ G_MR ENDL);
+	printf("%s nom       : %-20.20s %s cin       : %20d    %s\n", \
 			G_VERT, cl.nom, G_VERT, cl.cin, G_VERT);
-	printf("%s prenom    : %-20s %s telephone : %20.12d    %3s\n", \
+	printf("%s prenom    : %-20.20s %s telephone : %20.12d    %3s\n", \
 			G_VERT, cl.prenom, G_VERT, cl.telephone, G_VERT);
-	printf("%s adresse   : %-20s %s %50s\n", G_VERT, cl.adresse, G_VERT, G_VERT);
-
-	printf(G_DL G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ\
-		G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_DR ENDL);
-
+	printf("%s adresse   : %-20.15s %s %50s\n", \
+			G_VERT, cl.adresse, G_VERT, G_VERT);
+	printf(G_DL G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ \
+		G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ \
+		G_HORZ G_HORZ G_HORZ G_DR ENDL);
 }
+
+/*
+** ***************************************************************************
+*/
