@@ -3,7 +3,7 @@
 void	ft_rental_management(void)
 {
 	int choice;
-	char buff[8][50] = {"Location   d'une   voiture", 
+	char buff[7][50] = {"Location   d'une   voiture", 
 		"Visualiser contrat....................1", 
 		"louer voiture.........................2", 
 		"Retourner voiture.....................3", 
@@ -21,7 +21,7 @@ void	ft_rental_management(void)
 		else if (choice == 4)	modifier_une_contrat();
 		else if (choice == 5)	sup_une_contrat();
 		else if (choice == 6)	break ;
-		printf("saisir 0 pour revenir au menu precedent : ");
+		printf("saisir un chiffre pour revenir au menu precedent : ");
 		scanf("%d", &choice);
 	}
 }
@@ -30,12 +30,12 @@ void	ft_rental_management(void)
 ** **************************************************************************
 */
 
-void	ft_visualizer_les_contrat()
+void	ft_visualizer_les_contrat(void)
 {
+	FILE	*file;
 	contrat	cntr;
-	FILE	*file = fopen("ContratsLocations", "r");
 
-	if (file == NULL)
+	if (!(file = fopen("ContratsLocations", "r")))
 	{
 		file = fopen("ContratsLocations", "w");
 		fclose(file);
@@ -50,7 +50,7 @@ void	ft_visualizer_les_contrat()
 ** **************************************************************************
 */
 
-void	louer_une_voiture()
+void	louer_une_voiture(void)
 {
 	contrat	cntr;
 
@@ -63,7 +63,7 @@ void	louer_une_voiture()
 
 void	get_contrat_input(contrat *cntr)
 {
-	printf("please write the information of this contrat : \n");
+	printf("S'il vous plait saisir les informatios sur le contrat : \n");
 	printf("contrat number : "); 	scanf("%f", &(cntr->numContrat));
 	printf("voiture id     : ");	scanf("%d",  &(cntr->idVoiture));
 	printf("client id      : ");	scanf("%d",  &(cntr->idClient));
@@ -81,7 +81,6 @@ void	get_contrat_input(contrat *cntr)
 
 int	verify_this_contrat(contrat cntr)
 {
-
 	FILE	*ptr = NULL;
 	voiture	car_var = {};
 	client	client_var = {};
@@ -89,23 +88,25 @@ int	verify_this_contrat(contrat cntr)
 	
 	if (!(ptr = fopen("Voitures", "r")))
 	{
-		printf("error while opening voitures file.\n");
-		exit (1);
+		printf("ERROR: while opening voitures file.\n");
+		return (-1);
 	}
 	car_var.idVoiture = -1;
 	while (1)
 	{
+		// searching for the car information in file.
 		end = read_one_car_info(ptr, &car_var);
 		if (end == EOF || cntr.idVoiture == car_var.idVoiture)
 			break;
 	}
 	if (cntr.idVoiture != car_var.idVoiture)
 	{
-		//check if the car id is valid 
+		//there no car with that id
 		printf("ERROR : there is no car with this Id.\n");
 		return (-1);
 	}
-	else if ((cntr.idVoiture == car_var.idVoiture) && (strcmp(car_var.EnLocation, "Non") != 0))
+	else if ((cntr.idVoiture == car_var.idVoiture) && \
+			(strcmp(car_var.EnLocation, "Non") != 0))
 	{
 		//check if car is already rented
 		printf("ERROR : the car is already rented.\n");
@@ -117,17 +118,19 @@ int	verify_this_contrat(contrat cntr)
 	if (!(ptr = fopen("Clients", "r")))
 	{
 		printf("ERROR while opening Clients file.\n");
-		exit (1);
+		return (-1);
 	}
 	client_var.idClient = -1;
 	while (1)
 	{
+		// searching for the client total info;
 		end = read_one_client(&client_var, ptr);
 		if (end == EOF || client_var.idClient == cntr.idClient)
 			break ;
 	}
 	if (client_var.idClient != cntr.idClient)
 	{
+		// couldn't find the client in our data;
 		printf("ERROR : No such client id.\n");
 		return (-1);
 	}
@@ -138,12 +141,17 @@ int	verify_this_contrat(contrat cntr)
 ** **************************************************************************
 */
 
-void	retourner_une_voiture()
+void	retourner_une_voiture(void)
 {
-	int 	id;
+	FILE	*file;
 	contrat	cntr;
-	FILE	*file =  fopen("ContratsLocations", "r");
+	int 	id;
 
+	if (!(file = fopen("ContratsLocations", "r")))
+	{
+		printf("ERROR : contratsLocations file Doesn't exist.\n");
+		return ;
+	}
 	printf("Donner l'id du contrat : ");
 	scanf("%d", &id);
 
@@ -164,22 +172,21 @@ void	retourner_une_voiture()
 ** **************************************************************************
 */
 
-void	modifier_une_contrat()
+void	modifier_une_contrat(void)
 {
 	float	contrat_id;
+	FILE	*file;
 	int	choix;
 	contrat	cntr;
-	FILE	*file;
 
 	if (!(file = fopen("ContratsLocations", "r")))
 	{
-		printf("A BIIIG FAT PROBLEM\n");
+		printf("ContrasLocation file doesn't exist.\n");
+		return ;
 	}
 	get_contrat_modification(&contrat_id, &choix);
-	while (1)
+	while (EOF != read_one_contrat(file, &cntr))
 	{
-		if (EOF == read_one_contrat(file, &cntr))
-			break ;
 		if (contrat_id == cntr.numContrat)
 		{
 			fclose(file);
@@ -208,10 +215,9 @@ void	modifier_une_contrat()
 						&(cntr.fin.mois), &(cntr.fin.year));
 				}
 				add_this_contrat(cntr, "ContratsLocations");
-				return ;
 			}
 			else
-				printf("choix invalid\n");
+				printf("Choix invalid.\n");
 			return ;
 		}
 	}
@@ -222,12 +228,12 @@ void	get_contrat_modification(float *contrat_id, int *choix)
 {
 	printf("Donner l'id de le contrat tu veut modifer : ");
 	scanf("%f", contrat_id);
-	printf("que voulez-vous modifier?\n");
+	printf("Que voulez-vous modifier?\n");
 	printf("\tidVoiture...............1\n");
 	printf("\tidClient................2\n");
 	printf("\tcout....................3\n");
-	printf("\tdebut...................4\n");
-	printf("\tfin.....................5\n");
+	printf("\tdate de debut...........4\n");
+	printf("\tdate de fin.............5\n");
 	printf("\t\tvotre choix :  ");
 	scanf("%d", choix);
 }
@@ -236,7 +242,7 @@ void	get_contrat_modification(float *contrat_id, int *choix)
 ** **************************************************************************
 */
 
-void	sup_une_contrat()
+void	sup_une_contrat(void)
 {
 	contrat		contrat;
 	FILE		*file;
@@ -246,12 +252,23 @@ void	sup_une_contrat()
 
 	cars = fopen("Voitures", "r");
 	file = fopen("ContratsLocations", "r");
+	if (!cars || !file)
+	{
+		if (file)
+			fclose(file);
+		if (cars)
+			fclose(cars);
+		printf("ERROR : file Doesn't exist.\n");
+		return ;
+	}
 	printf("Donnez le nome du contrat que vous souhaitez supprimer : ");
 	scanf("%d", &id);
 	while (1)
 	{
+		// validating the given conract id
 		if (EOF == read_one_contrat(file, &contrat))
 		{
+			// we've reached the end of file without finding the id
 			printf("this Contrat Doesn't exist.\n");
 			fclose(cars);
 			fclose(file);
@@ -260,6 +277,7 @@ void	sup_une_contrat()
 		if (contrat.numContrat == id)
 			break;
 	}
+	// checking if the car in not located
 	while (1)
 	{
 		read_one_car_info(cars, &car);
@@ -291,8 +309,14 @@ void	sup_une_contrat()
 
 void	add_this_contrat(contrat cntr, char *filename)
 {
-	FILE	*file = fopen (filename, "a+");
+	FILE	*file;
 
+	if (!(file = fopen (filename, "a+")))
+	{
+		file = fopen("ContratsLocations", "w");
+		fclose(file);
+		file = fopen("ContratsLocations", "a+");
+	}
 	fprintf(file, "<contart>\n");
 
 	fprintf(file, "\t<numcontrat> %f </numcontrat>\n", cntr.numContrat);
@@ -315,14 +339,17 @@ void	add_this_contrat(contrat cntr, char *filename)
 	fprintf(file, "\t</date_fin>\n");
 
 	fprintf(file, "</contrat>\n");
-
 	fclose(file);
 }
 
-int		read_one_contrat(FILE *file, contrat *cntr)
+/*
+** ---------------------------------------------------------------------------- 
+*/
+
+int	read_one_contrat(FILE *file, contrat *cntr)
 {
-	int		ret;
-	char		line[20];
+	int	ret;
+	char	line[20];
 
 	fscanf(file, "%s\n",    line);
 
@@ -349,6 +376,10 @@ int		read_one_contrat(FILE *file, contrat *cntr)
 	return (ret);
 }
 
+/*
+** ---------------------------------------------------------------------------- 
+*/
+
 void	print_one_contrat(contrat contrat)
 {
 	printf(G_UL G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ G_HORZ \
@@ -373,16 +404,23 @@ void	print_one_contrat(contrat contrat)
 		G_HORZ G_HORZ G_HORZ G_HORZ  G_HORZ G_HORZ G_HORZ G_DR ENDL);
 }
 
+/*
+** ---------------------------------------------------------------------------- 
+*/
+
 void	del_this_contrat(int idContrat)
 {
 	contrat	temp_cntr;
 	FILE	*ptr1;
 	FILE	*ptr2;
 
-	ptr1 = fopen("ContratsLocations", "r");
+	if (!(ptr1 = fopen("ContratsLocations", "r")))
+	{
+		printf("ERROR: ContrasLocations file Doesn't exist.\n");
+		return ;
+	}
 	ptr2 = fopen("cntr_replica.txt", "w");
 	fclose(ptr2);
-
 	while (1)
 	{
 		if (read_one_contrat(ptr1, &temp_cntr) == EOF)
@@ -395,4 +433,6 @@ void	del_this_contrat(int idContrat)
 	rename("cntr_replica.txt", "ContratsLocations");
 }
 
-
+/*
+** ---------------------------------------------------------------------------- 
+*/
