@@ -28,6 +28,10 @@
 #define  G_DL	"\e[0;32m\u2517\e[0m"
 #define  G_DR	"\e[0;32m\u251B\e[0m"
 
+#define CARS_FILE   "../Data/Voitures"
+#define CLIENT_FILE "../Data/Clients"
+#define CONTRA_FILE "../Data/ContratsLocations"
+
 typedef struct	date
 {
 	int	year;

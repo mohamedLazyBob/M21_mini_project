@@ -40,7 +40,7 @@ void	ft_list_cars(void)
 	FILE	*file;
 	char	line[5];
 
-	if (!(file = fopen("Voitures", "r")))
+	if (!(file = fopen(CARS_FILE, "r")))
 	{
 		printf("ERROR couldn't open Voitures file\n");
 		return ;
@@ -164,7 +164,7 @@ void	ft_modify_car_info(void)
 	int	ret;
 	int	id;
 
-	if (!(file = fopen("Voitures", "r")))
+	if (!(file = fopen(CARS_FILE, "r")))
 	{
 		printf("Voitures file Doesn't exist.\n");
 		return ;
@@ -193,8 +193,8 @@ void	ft_modify_car_info(void)
 				else
 					strcpy(car.EnLocation, "Oui");
 			}
-			file = fopen("Voitures", "a+");
-			ft_add_this_car(car, "Voitures");
+			file = fopen(CARS_FILE, "a+");
+			ft_add_this_car(car, CARS_FILE);
 			break;
 		}
 	}
@@ -247,7 +247,7 @@ void	ft_delete_car(void)
 	int	ret;
 	int	id;
 
-	if (!(file = fopen("Voitures", "r")))
+	if (!(file = fopen(CARS_FILE, "r")))
 	{
 		printf("ERROR: Voiture file Doesn't exist.\n");
 		return ;
@@ -279,7 +279,7 @@ void	delete_this_car(voiture car)
 	voiture	temp_car;
 	int	end;
 
-	if (!(fileptr1 = fopen("Voitures", "r")))
+	if (!(fileptr1 = fopen(CARS_FILE, "r")))
 	{
 		printf("ERROR: Voiture file Doesn't exist.\n");
 		return ;
@@ -309,7 +309,7 @@ void	modifier_car_enLocation(int id, char *str)
 	FILE	*file;
 	voiture	car;
 
-	if (!(file = fopen("Voitures", "r")))
+	if (!(file = fopen(CARS_FILE, "r")))
 	{
 		printf("ERROR: Voiture file Doesn't exist.\n");
 		return ;
@@ -321,7 +321,7 @@ void	modifier_car_enLocation(int id, char *str)
 			fclose(file);
 			delete_this_car(car);
 			strcpy(car.EnLocation, str);
-			ft_add_this_car(car, "Voitures");
+			ft_add_this_car(car, CARS_FILE);
 			return ;
 		}
 	}
