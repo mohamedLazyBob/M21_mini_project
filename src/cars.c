@@ -2,6 +2,7 @@
 
 /*
 ** ****************************************************************************
+** the main function for cars menu.
 */
 
 void	ft_cars_management(void)
@@ -31,6 +32,7 @@ void	ft_cars_management(void)
 
 /*
 ** ****************************************************************************
+** this function lists all available cars in the file.
 */
 
 void	ft_list_cars(void)
@@ -38,7 +40,6 @@ void	ft_list_cars(void)
 	int	ret;
 	voiture	car;
 	FILE	*file;
-	char	line[5];
 
 	if (!(file = fopen(CARS_FILE, "r")))
 	{
@@ -53,6 +54,7 @@ void	ft_list_cars(void)
 
 /*
 ** ****************************************************************************
+** this prints one car information in a user friendly manner 
 */
 
 void	print_one_car(voiture car)
@@ -88,31 +90,69 @@ int		read_one_car_info(FILE *file, voiture *car)
 
 	fscanf(file, "%s\n", line);
 
-	fscanf(file, "<nomVoiture> %s </nomVoiture>\n", car->nomVoiture);
+	fscanf(file, "<nomVoiture> %[^<]s", car->nomVoiture);
+	fscanf(file, "</nomVoiture>\n");
+	car->nomVoiture[strlen(car->nomVoiture) - 1] = 0;
+
 	fscanf(file, "<idVoiture> %d </idVoiture>\n",  &(car->idVoiture));
 	fscanf(file, "<nbplaces> %d </nbplaces>\n",   &(car->nbplaces));
 	fscanf(file, "<prixJour> %d </prixJour>\n",   &(car->prixJour));
-	fscanf(file, "<marque> %s </marque>\n",     car->marque);
-	fscanf(file, "<couleur> %s </couleur>\n",    car->couleur);
-	fscanf(file, "<enLocation> %s </enLocation>\n", car->EnLocation);
 
-	ret = fscanf(file, "%s", line);
+	fscanf(file, "<marque> %[^<]s",     car->marque);
+	fscanf(file, "</marque>\n");
+	car->marque[strlen(car->marque) - 1] = 0;
+
+	fscanf(file, "<couleur> %[^<]s",    car->couleur);
+	fscanf(file, "</couleur>\n");
+	car->couleur[strlen(car->couleur) - 1] = 0;
+
+	fscanf(file, "<enLocation> %[^<]s", car->EnLocation);
+	fscanf(file, "</enLocation>\n");
+	car->EnLocation[strlen(car->EnLocation) - 1] = 0;
+
+	ret = fscanf(file, "%s\n", line);
 	return (ret);
 }
 
 /*
 ** ****************************************************************************
+** printfs the menu and get the input of the new car from the user.
+** saves those information to the file.
 */
 
 void	get_car_input(voiture *car)
 {
+	char temp[10];
+
 	printf("Saisir les informations de la nouvelle voiture:\n");
-	printf("\tnomVoiture  : "); scanf("%15s", car->nomVoiture);
-	printf("\tidVoiture   : "); scanf("%d", &(car->idVoiture));
-	printf("\tmarque      : "); scanf("%15s", car->marque);
-	printf("\tnbplaces    : "); scanf("%d", &(car->nbplaces));
-	printf("\tcouleur     : "); scanf("%7s", car->couleur);
-	printf("\tprixJour    : "); scanf("%d", &(car->prixJour));
+
+	printf("\tnomVoiture  : ");
+	//scanf("%15s", car->nomVoiture);
+	ft_read_buffer(car->nomVoiture, 15);
+
+	printf("\tidVoiture   : ");
+//	scanf("%d", &(car->idVoiture));
+	ft_read_buffer(temp, 10);
+	car->idVoiture = atoi(temp);
+
+	printf("\tmarque      : ");
+//	scanf("%15s", car->marque);
+	ft_read_buffer(car->marque, 15);
+
+	printf("\tnbplaces    : ");
+//	scanf("%d", &(car->nbplaces));
+	ft_read_buffer(temp, 10);
+	car->nbplaces = atoi(temp);
+
+	printf("\tcouleur     : ");
+//	scanf("%7s", car->couleur);
+	ft_read_buffer(car->couleur, 7);
+
+	printf("\tprixJour    : ");
+//	scanf("%d", &(car->prixJour));
+	ft_read_buffer(temp, 10);
+	car->prixJour = atoi(temp);
+
 	strcpy(car->EnLocation, "Non"); 
 }
 
@@ -121,11 +161,38 @@ void	ft_add_car(void)
 	voiture car;
 
 	get_car_input(&car);
-	ft_add_this_car(car, CARS_FILE);
+	if (false == check_dup_car(car.idVoiture))
+		ft_add_this_car(car, CARS_FILE);
+	else
+		printf("Id is not valid: duplicated id!\n");
+}
+
+
+/*
+** ***************************************************************************
+*/
+
+bool	check_dup_car(int id)
+{
+	int	ret;
+	voiture	car;
+	FILE	*file;
+
+	if (!(file = fopen(CARS_FILE, "r")))
+		return (false);
+	while ((ret = read_one_car_info(file, &car)) != EOF)
+		if (car.idVoiture == id)
+		{
+			fclose(file);
+			return (true);
+		}
+	fclose(file);
+	return (false);
 }
 
 /*
-** ****************************************************************************
+** ***************************************************************************
+** adds one car information to the file where we stock data.
 */
 
 void	ft_add_this_car(voiture car, char *filename)
@@ -139,13 +206,13 @@ void	ft_add_this_car(voiture car, char *filename)
 		ptr = fopen(filename, "a+");
 	}
 	fprintf(ptr, "<car>\n");
-	fprintf(ptr, "<nomVoiture> %.15s </nomVoiture>\n", car.nomVoiture);
-	fprintf(ptr, "<idVoiture> %d </idVoiture>\n",  car.idVoiture);
-	fprintf(ptr, "<nbplaces> %d </nbplaces>\n",   car.nbplaces);
-	fprintf(ptr, "<prixJour> %d </prixJour>\n",   car.prixJour);
-	fprintf(ptr, "<marque> %.15s </marque>\n",     car.marque);
-	fprintf(ptr, "<couleur> %.7s </couleur>\n",    car.couleur);
-	fprintf(ptr, "<enLocation> %.4s </enLocation>\n", car.EnLocation);
+	fprintf(ptr, "\t<nomVoiture> %s </nomVoiture>\n", car.nomVoiture);
+	fprintf(ptr, "\t<idVoiture> %d </idVoiture>\n",  car.idVoiture);
+	fprintf(ptr, "\t<nbplaces> %d </nbplaces>\n",   car.nbplaces);
+	fprintf(ptr, "\t<prixJour> %d </prixJour>\n",   car.prixJour);
+	fprintf(ptr, "\t<marque> %s </marque>\n",     car.marque);
+	fprintf(ptr, "\t<couleur> %s </couleur>\n",    car.couleur);
+	fprintf(ptr, "\t<enLocation> %s </enLocation>\n", car.EnLocation);
 	fprintf(ptr, "</car>\n");
 	fclose(ptr);
 }
@@ -204,6 +271,7 @@ void	ft_modify_car_info(void)
 
 /*
 ** ****************************************************************************
+** prints the menu of new changes, and gets the input from the user
 */
 
 int	print_modify_menu(int *id, int *choice, int *nbr, char *str)
@@ -231,8 +299,8 @@ int	print_modify_menu(int *id, int *choice, int *nbr, char *str)
 		}
 		else if (*choice > 3 && *choice < 8)
 		{
-			printf("Saisir la modification: ");
-			scanf("%20s", str);
+			printf("Saisir la modification : ");
+			ft_read_buffer(str, 20);
 			return (1);
 		}
 	}
@@ -261,7 +329,11 @@ void	ft_delete_car(void)
 		if (car.idVoiture == id)
 		{
 			fclose(file);
-			delete_this_car(car);
+			ret = delete_this_car(car);
+			if (ret == 1)
+				printf("The car has been successfully deleted.\n");
+			else
+				printf("Could't find the car, id non valid.\n");
 			return ;
 		}
 	}
@@ -274,17 +346,18 @@ void	ft_delete_car(void)
 ** ****************************************************************************
 */
 
-void	delete_this_car(voiture car)
+int	delete_this_car(voiture car)
 {
 	FILE	*fileptr1;
 	FILE	*fileptr2;
 	voiture	temp_car;
 	int	end;
+	int	ret = -1;
 
 	if (!(fileptr1 = fopen(CARS_FILE, "r")))
 	{
 		printf("ERROR: Voiture file Doesn't exist.\n");
-		return ;
+		return (ret);
 	}
 	fileptr2 = fopen("replica.txt", "w");
 	fclose(fileptr2);
@@ -295,15 +368,18 @@ void	delete_this_car(voiture car)
 			break;
 		if (temp_car.idVoiture != car.idVoiture)
 			ft_add_this_car(temp_car, "replica.txt");
+		else
+			ret = 1;
 	}
 	fclose(fileptr1);
 	remove(CARS_FILE);
 	rename("replica.txt", CARS_FILE);
-	return ;
+	return (ret);
 }
 
 /*
 ** ****************************************************************************
+** modifys the velue of enLocation string in the file (Oui or Non).
 */
 
 void	modifier_car_enLocation(int id, char *str)

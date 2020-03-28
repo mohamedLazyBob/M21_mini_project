@@ -128,6 +128,7 @@ void	print_one_car(voiture car);
 
 void	ft_add_car(void);
 void	get_car_input(voiture *car);
+bool	check_dup_car(int id);
 void	ft_add_this_car(voiture car, char *filename);
 
 void	ft_modify_car_info(void);
@@ -135,6 +136,6 @@ int	print_modify_menu(int *id, int *choice, int *nbr, char *str);
 void	modifier_car_enLocation(int id, char *str);
 
 void	ft_delete_car(void);
-void	delete_this_car(voiture car);
+int	delete_this_car(voiture car);
 
 #endif
