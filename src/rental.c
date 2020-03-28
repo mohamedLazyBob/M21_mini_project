@@ -1,4 +1,13 @@
+/******************************************************************************/
+/*                              Mohamed zaboub                                */
+/******************************************************************************/
+
 #include "mini_project.h"
+
+/*
+** ****************************************************************************
+**  main menu/function for contralocation
+*/
 
 void	ft_rental_management(void)
 {
@@ -28,6 +37,8 @@ void	ft_rental_management(void)
 
 /*
 ** **************************************************************************
+** calls the propre functions to read and print one clien, 
+** tell that prints all the contras.
 */
 
 void	ft_visualizer_les_contrat(void)
@@ -48,7 +59,8 @@ void	ft_visualizer_les_contrat(void)
 }
 
 /*
-** **************************************************************************
+** ****************************************************************************
+** get the new infos from the user, validate them, then adding them to the file
 */
 
 void	louer_une_voiture(void)
@@ -71,13 +83,17 @@ void	get_contrat_input(contrat *cntr)
 	printf("cout           : ");	scanf("%d",  &(cntr->cout));
 	printf("le temp dans cette format : heure jour mois année \n");
 	printf("debut          : ");	scanf("%d %d %d %d",   \
-		&cntr->debut.hh, &cntr->debut.jour, &cntr->debut.mois, &cntr->debut.year);
+		&cntr->debut.hh, &cntr->debut.jour, \
+		&cntr->debut.mois, &cntr->debut.year);
 	printf("fin            : ");	scanf("%d %d %d %d",   \
-		&cntr->fin.hh, &cntr->fin.jour, &cntr->fin.mois, &cntr->fin.year);
+		&cntr->fin.hh, &cntr->fin.jour, \
+		&cntr->fin.mois, &cntr->fin.year);
 }
 
 /*
-** **************************************************************************
+** ****************************************************************************
+** verify the new contrat information.
+** if there is a client/car with that data
 */
 
 int	verify_this_contrat(contrat cntr)
@@ -135,11 +151,14 @@ int	verify_this_contrat(contrat cntr)
 		printf("ERROR : No such client id.\n");
 		return (-1);
 	}
+// check the contrat id here.
 	return (1);
 }
 
 /*
-** **************************************************************************
+** ****************************************************************************
+**  gets the id of contrat thats going to be ended.
+**  delete id, and change the car back to be on for location.
 */
 
 void	retourner_une_voiture(void)
@@ -170,7 +189,8 @@ void	retourner_une_voiture(void)
 }
 
 /*
-** **************************************************************************
+** ****************************************************************************
+** just the same as all the other contras.
 */
 
 void	modifier_une_contrat(void)
@@ -189,37 +209,38 @@ void	modifier_une_contrat(void)
 	get_contrat_modification(&contrat_id, &choix);
 	while (EOF != read_one_contrat(file, &cntr))
 	{
-		if (contrat_id == cntr.numContrat)
+		if ((contrat_id == cntr.numContrat) && \
+			(choix >= 1 && choix <= 5))
 		{
 			fclose(file);
-			if (choix >= 1 && choix <= 5)
+			del_this_contrat(cntr.numContrat);
+			printf("saisir la modification : ");
+			if (choix == 1)
+				scanf("%d", &(cntr.idVoiture));
+			else if (choix == 2)
+				scanf("%d", &(cntr.idClient));
+			else if (choix == 3)
+				scanf("%d", &(cntr.cout));
+			else if (choix == 4)
 			{
-				del_this_contrat(cntr.numContrat);
-				printf("saisir la modification : ");
-				if (choix == 1)
-					scanf("%d", &(cntr.idVoiture));
-				else if (choix == 2)
-					scanf("%d", &(cntr.idClient));
-				else if (choix == 3)
-					scanf("%d", &(cntr.cout));
-				else if (choix == 4)
-				{
-					printf("\ndebut in this format hh dd/mm/yy : ");
-					scanf("%d %d %d %d",   \
-						&(cntr.debut.hh), &(cntr.debut.jour), \
-						&(cntr.debut.mois), &(cntr.debut.year));
-				}
-				else if (choix == 5)
-				{
-					printf("\nfin in this format hh dd/mm/yy :  ");
-					scanf("%d %d %d %d",   \
-						&(cntr.fin.hh), &(cntr.fin.jour), \
-						&(cntr.fin.mois), &(cntr.fin.year));
-				}
-				add_this_contrat(cntr, CONTRA_FILE);
+				printf("\ndebut in this format hh dd/mm/yy : ");
+				scanf("%d %d %d %d",   \
+					&(cntr.debut.hh), &(cntr.debut.jour), \
+					&(cntr.debut.mois), &(cntr.debut.year));
 			}
-			else
-				printf("Choix invalid.\n");
+			else if (choix == 5)
+			{
+				printf("\nfin in this format hh dd/mm/yy :  ");
+				scanf("%d %d %d %d",   \
+					&(cntr.fin.hh), &(cntr.fin.jour), \
+					&(cntr.fin.mois), &(cntr.fin.year));
+			}
+			add_this_contrat(cntr, CONTRA_FILE);
+			return ;
+		}
+		else if (contrat_id == cntr.numContrat)
+		{
+			printf("Choix invalid.\n");
 			return ;
 		}
 	}
@@ -241,7 +262,9 @@ void	get_contrat_modification(float *contrat_id, int *choix)
 }
 
 /*
-** **************************************************************************
+** ****************************************************************************
+** askes the user for the contrat id,
+**  and if car in it isn't rented, we delete it.
 */
 
 void	sup_une_contrat(void)
@@ -305,8 +328,9 @@ void	sup_une_contrat(void)
 
 
 /*
-** **************************************************************************
-**					main functions
+** ****************************************************************************
+** ****************************************************************************
+**		main functions: their names are expressive.
 */
 
 void	add_this_contrat(contrat cntr, char *filename)
@@ -346,6 +370,7 @@ void	add_this_contrat(contrat cntr, char *filename)
 
 /*
 ** ---------------------------------------------------------------------------- 
+** reads one contrat from the file, that is already open.
 */
 
 int	read_one_contrat(FILE *file, contrat *cntr)
@@ -380,6 +405,7 @@ int	read_one_contrat(FILE *file, contrat *cntr)
 
 /*
 ** ---------------------------------------------------------------------------- 
+** prints the the one contrat that had been sent to it.
 */
 
 void	print_one_contrat(contrat contrat)
@@ -408,6 +434,7 @@ void	print_one_contrat(contrat contrat)
 
 /*
 ** ---------------------------------------------------------------------------- 
+**  Delets the contrat that it receives as argument.
 */
 
 void	del_this_contrat(int idContrat)
@@ -436,5 +463,5 @@ void	del_this_contrat(int idContrat)
 }
 
 /*
-** ---------------------------------------------------------------------------- 
+** ****************************************************************************
 */

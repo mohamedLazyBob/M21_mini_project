@@ -115,7 +115,8 @@ bool	ft_check_client(int id);
 int	read_one_client(client *cl, FILE *file);
 int	del_this_client(int id);
 void	print_one_client(client cl);
-void	get_client_info(client *cl);
+static void get_client_info(client *cl);
+
 
 /*
 **  in file : cars.c

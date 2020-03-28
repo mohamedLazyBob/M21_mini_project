@@ -1,0 +1,24 @@
+<client>
+	<idClient> 2 </idClient>
+	<nom> zaboub ait massa </nom>
+	<prenom> moha med </prenom>
+	<cin> 123456789 </cin>
+	<adresse> dakhla agadir  </adresse>
+	<telephone> 67345854 </telephone>
+</client>
+<client>
+	<idClient> 3 </idClient>
+	<nom> mohamed </nom>
+	<prenom> moddy </prenom>
+	<cin> 123 </cin>
+	<adresse> ait melloul    </adresse>
+	<telephone> 111111 </telephone>
+</client>
+<client>
+	<idClient> 4 </idClient>
+	<nom> hajar </nom>
+	<prenom> hajar </prenom>
+	<cin> 1234 </cin>
+	<adresse> agadir dakhla  </adresse>
+	<telephone> 123456789 </telephone>
+</client>

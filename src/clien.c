@@ -1,4 +1,13 @@
+/******************************************************************************/
+/*                              Mohamed zaboub                                */
+/******************************************************************************/
+
 #include "mini_project.h"
+
+/*
+** ****************************************************************************
+**  the main function to take care of the cars.
+*/
 
 void	ft_clients_management(void)
 {
@@ -50,13 +59,25 @@ void	list_all_clients(void)
 }
 
 /*
-** ***************************************************************************
+** ****************************************************************************
 ** those two funcs are for adding a new client
 ** the first one gets his information,"reading multiple words for all string"
 ** the 2nd funcs sums every thing and checking if the client id is duplicated
 */
 
-void	get_client_info(client *cl)
+void	add_client(void)
+{
+	client	cl;
+
+	write (1, "\033[0;31m>> Ajouter un client.\033[0m\n", 40);
+	get_client_info(&cl);
+	if (true == ft_check_client(cl.idClient))
+		printf("Client is duplicated, try another Id.\n");
+	else
+		add_this_client(cl, CLIENT_FILE);
+}
+
+static void	get_client_info(client *cl)
 {
 	char temp[10];
 	printf("Saisir les informations du nouveau client : \n");
@@ -77,20 +98,8 @@ void	get_client_info(client *cl)
 	cl->telephone = atoi(temp);
 }
 
-void	add_client(void)
-{
-	client	cl;
-
-	write (1, "\033[0;31m>> Ajouter un client.\033[0m\n", 40);
-	get_client_info(&cl);
-	if (true == ft_check_client(cl.idClient))
-		printf("Client is duplicated, try another Id.\n");
-	else
-		add_this_client(cl, CLIENT_FILE);
-}
-
 /*
-** ***************************************************************************
+** ****************************************************************************
 **  this function check if the client is duplicated, using it's given id
 **  if there is already a client with that spesific id return true 
 **  else false
@@ -124,7 +133,7 @@ bool	ft_check_client(int id)
 }
 
 /*
-** ***************************************************************************
+** ****************************************************************************
 **  - prints the menu for modification.
 **  - searches for the client.
 **  - modify what the user wants.
@@ -191,7 +200,7 @@ void	modify_client(void)
 }
 
 /*
-** ***************************************************************************
+** ****************************************************************************
 ** deletes a client from the file.
 */
 
@@ -211,7 +220,9 @@ void	del_client(void)
 }
 
 /*
-** ***************************************************************************
+** ****************************************************************************
+**		here the functions used to edit one client info starts.
+** ****************************************************************************
 ** adds ONE Client to the file, (using xml tagges)
 */
 
@@ -237,7 +248,7 @@ void	add_this_client(client cl, char *filename)
 }
 
 /*
-** ***************************************************************************
+** ----------------------------------------------------------------------------
 ** reads one client from the file, 
 ** just one client at every call to the function.
 ** the scanf delemeter is '<' 
@@ -272,7 +283,7 @@ int	read_one_client(client *cl, FILE *file)
 }
 
 /*
-** ***************************************************************************
+** ----------------------------------------------------------------------------
 ** this deletes one client at a time.
 ** returning 1 if that went right, else -1 (id doesn't exist).
 */
@@ -309,7 +320,7 @@ int	del_this_client(int id)
 }
 
 /*
-** ***************************************************************************
+** ----------------------------------------------------------------------------
 ** this prints one client at each time we call it with it's information
 ** with some unicode characters, so that the table is representative.
 */
@@ -335,5 +346,6 @@ void	print_one_client(client cl)
 }
 
 /*
-** ***************************************************************************
+** ****************************************************************************
+** 				THE END
 */

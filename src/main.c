@@ -1,4 +1,14 @@
+/******************************************************************************/
+/*                              Mohamed zaboub                                */
+/******************************************************************************/
+
 #include "mini_project.h"
+
+/*
+** ***************************************************************************
+**  This function is used to print all the principal menus. 
+**  So that we have a standard menu shape.
+*/
 
 int	print_this_menu(char buff[][50], int size)
 {
@@ -8,17 +18,21 @@ int	print_this_menu(char buff[][50], int size)
 	choice = 0;
 	do
 	{
-		printf("      %s", UL HORZ HORZ HORZ HORZ HORZ HORZ HORZ HORZ HORZ UR ENDL);
+		printf("      %s", UL HORZ HORZ HORZ HORZ HORZ HORZ HORZ \
+					HORZ HORZ UR ENDL);
 		printf("      %s     %s     %s\n", VERT, buff[0], VERT);
-		printf("      %s", DL HORZ HORZ  HORZ HORZ HORZ HORZ HORZ HORZ HORZ DR ENDL);
+		printf("      %s", DL HORZ HORZ  HORZ HORZ HORZ HORZ HORZ \
+					HORZ HORZ DR ENDL);
 
 		idx = 1;
-		printf(UL HORZ HORZ HORZ HORZ HORZ  HORZ HORZ  HORZ HORZ HORZ HORZ HORZ UR ENDL);
-		printf("%s                                                %s\n", VERT, VERT);
+		printf(UL HORZ HORZ HORZ HORZ HORZ  HORZ HORZ  HORZ HORZ \
+					HORZ HORZ HORZ UR ENDL);
+		printf("%-47s %28s\n", VERT, VERT);
 		while (idx < size)
 			printf("%s     %s    %s\n", VERT, buff[idx++], VERT);
-		printf("%s                                                %s\n", VERT, VERT);
-		printf(DL HORZ HORZ HORZ  HORZ HORZ  HORZ HORZ  HORZ HORZ HORZ HORZ HORZ DR ENDL);
+		printf("%-47s %28s\n", VERT, VERT);
+		printf(DL HORZ HORZ HORZ  HORZ HORZ  HORZ HORZ  HORZ HORZ \
+					HORZ HORZ HORZ DR ENDL);
 		printf("\t\t votre choix : ");
 		scanf("%d", &choice);
 	} while (choice < 0 || choice > size);
@@ -27,18 +41,21 @@ int	print_this_menu(char buff[][50], int size)
 }
 
 /*
-** ***************************************************************************
+** ****************************************************************************
 ** reads one whole line from the input.
 ** then copys just the first buff_size characters to str.
 */
 
 char	*ft_read_buffer(char *str, int buff_size)
 {
-	char	*buff = NULL;
-	int	linesize = 0;
-	size_t	len = 0;
+	int	linesize;
+	char	*buff;
 	char	*ret;
+	size_t	len;
 
+	len = 0;
+	linesize = 0;
+	buff = NULL;
 	do
 	{
 		linesize = getline(&buff, &len, stdin);
@@ -52,7 +69,8 @@ char	*ft_read_buffer(char *str, int buff_size)
 }
 
 /*
-** ***************************************************************************
+** ****************************************************************************
+** the main.
 */
 
 int		main(void)
@@ -63,7 +81,6 @@ int		main(void)
 				"Gestion voitures......................2", 
 				"Gestion clients.......................3", 
 				"Quitter...............................4"};
-
 	do
 	{
 		system("clear");
@@ -75,15 +92,9 @@ int		main(void)
 	   	else if (choice == 3)
 	   		ft_clients_management();
 	} while (choice >= 0 && choice < 4);
-
-/*	char line[10];
-	for (int i = 0; i < 5; i++)
-	{
-		char *ret = ft_read_buffer(line, 10);
-		printf("you've entred : [%s], %s;\n", line, ret);
-		printf("number : ");
-		scanf("%d\n", &choice);
-	}
-*/
 	return (0);
 }
+
+/*
+** ****************************************************************************
+*/

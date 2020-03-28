@@ -1,0 +1,18 @@
+<car>
+	<nomVoiture> red and black </nomVoiture>
+	<idVoiture> 2 </idVoiture>
+	<nbplaces> 100 </nbplaces>
+	<prixJour> 400 </prixJour>
+	<marque> bmw-i3 </marque>
+	<couleur> blue </couleur>
+	<enLocation> Non </enLocation>
+</car>
+<car>
+	<nomVoiture> BMW </nomVoiture>
+	<idVoiture> 1 </idVoiture>
+	<nbplaces> 4 </nbplaces>
+	<prixJour> 1 </prixJour>
+	<marque> bmw </marque>
+	<couleur> red </couleur>
+	<enLocation> Oui </enLocation>
+</car>
