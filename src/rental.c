@@ -35,12 +35,13 @@ void	ft_visualizer_les_contrat(void)
 	FILE	*file;
 	contrat	cntr;
 
-	if (!(file = fopen("ContratsLocations", "r")))
+	if (!(file = fopen(CONTRA_FILE, "r")))
 	{
-		file = fopen("ContratsLocations", "w");
+		file = fopen(CONTRA_FILE, "w");
 		fclose(file);
-		file = fopen("ContratsLocations", "r");
+		file = fopen(CONTRA_FILE, "r");
 	}
+	system("clear");
 	while (read_one_contrat(file, &cntr) != EOF)
 		print_one_contrat(cntr);
 	fclose(file);
@@ -57,7 +58,7 @@ void	louer_une_voiture(void)
 	get_contrat_input(&cntr);
 	if (verify_this_contrat(cntr) == -1)
 		return ;
-	add_this_contrat(cntr, "ContratsLocations");
+	add_this_contrat(cntr, CONTRA_FILE);
 	modifier_car_enLocation(cntr.idVoiture, "Oui");
 }
 
@@ -86,7 +87,7 @@ int	verify_this_contrat(contrat cntr)
 	client	client_var = {};
 	int 	end = 0;
 	
-	if (!(ptr = fopen("Voitures", "r")))
+	if (!(ptr = fopen(CARS_FILE, "r")))
 	{
 		printf("ERROR: while opening voitures file.\n");
 		return (-1);
@@ -115,7 +116,7 @@ int	verify_this_contrat(contrat cntr)
 	fclose(ptr);
 
 	//check if the client id is valid
-	if (!(ptr = fopen("Clients", "r")))
+	if (!(ptr = fopen(CLIENT_FILE, "r")))
 	{
 		printf("ERROR while opening Clients file.\n");
 		return (-1);
@@ -147,7 +148,7 @@ void	retourner_une_voiture(void)
 	contrat	cntr;
 	int 	id;
 
-	if (!(file = fopen("ContratsLocations", "r")))
+	if (!(file = fopen(CONTRA_FILE, "r")))
 	{
 		printf("ERROR : contratsLocations file Doesn't exist.\n");
 		return ;
@@ -179,7 +180,8 @@ void	modifier_une_contrat(void)
 	int	choix;
 	contrat	cntr;
 
-	if (!(file = fopen("ContratsLocations", "r")))
+	write (1, "\033[0;31m>> Modifier une Contras.\033[0m\n", 40);
+	if (!(file = fopen(CONTRA_FILE, "r")))
 	{
 		printf("ContrasLocation file doesn't exist.\n");
 		return ;
@@ -214,7 +216,7 @@ void	modifier_une_contrat(void)
 						&(cntr.fin.hh), &(cntr.fin.jour), \
 						&(cntr.fin.mois), &(cntr.fin.year));
 				}
-				add_this_contrat(cntr, "ContratsLocations");
+				add_this_contrat(cntr, CONTRA_FILE);
 			}
 			else
 				printf("Choix invalid.\n");
@@ -229,12 +231,12 @@ void	get_contrat_modification(float *contrat_id, int *choix)
 	printf("Donner l'id de le contrat tu veut modifer : ");
 	scanf("%f", contrat_id);
 	printf("Que voulez-vous modifier?\n");
-	printf("\tidVoiture...............1\n");
-	printf("\tidClient................2\n");
-	printf("\tcout....................3\n");
-	printf("\tdate de debut...........4\n");
-	printf("\tdate de fin.............5\n");
-	printf("\t\tvotre choix :  ");
+	printf("\t1 -- IdVoiture.\n");
+	printf("\t2 -- IdClient.\n");
+	printf("\t3 -- Cout.\n");
+	printf("\t4 -- Date de debut.\n");
+	printf("\t5 -- Date de fin.\n");
+	printf("votre choix :  ");
 	scanf("%d", choix);
 }
 
@@ -250,8 +252,8 @@ void	sup_une_contrat(void)
 	voiture		car;
 	int		id;
 
-	cars = fopen("Voitures", "r");
-	file = fopen("ContratsLocations", "r");
+	cars = fopen(CARS_FILE, "r");
+	file = fopen(CONTRA_FILE, "r");
 	if (!cars || !file)
 	{
 		if (file)
@@ -313,9 +315,9 @@ void	add_this_contrat(contrat cntr, char *filename)
 
 	if (!(file = fopen (filename, "a+")))
 	{
-		file = fopen("ContratsLocations", "w");
+		file = fopen(filename, "w");
 		fclose(file);
-		file = fopen("ContratsLocations", "a+");
+		file = fopen(filename, "a+");
 	}
 	fprintf(file, "<contart>\n");
 
@@ -414,7 +416,7 @@ void	del_this_contrat(int idContrat)
 	FILE	*ptr1;
 	FILE	*ptr2;
 
-	if (!(ptr1 = fopen("ContratsLocations", "r")))
+	if (!(ptr1 = fopen(CONTRA_FILE, "r")))
 	{
 		printf("ERROR: ContrasLocations file Doesn't exist.\n");
 		return ;
@@ -429,8 +431,8 @@ void	del_this_contrat(int idContrat)
 			add_this_contrat(temp_cntr, "cntr_replica.txt");
 	}
 	fclose(ptr1);
-	remove("ContratsLocations");
-	rename("cntr_replica.txt", "ContratsLocations");
+	remove(CONTRA_FILE);
+	rename("cntr_replica.txt", CONTRA_FILE);
 }
 
 /*

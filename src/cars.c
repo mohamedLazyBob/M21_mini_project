@@ -45,6 +45,7 @@ void	ft_list_cars(void)
 		printf("ERROR couldn't open Voitures file\n");
 		return ;
 	}
+	system("clear");
 	while ((ret = read_one_car_info(file, &car)) != EOF)
 		print_one_car(car);
 	fclose(file);
@@ -120,7 +121,7 @@ void	ft_add_car(void)
 	voiture car;
 
 	get_car_input(&car);
-	ft_add_this_car(car, "Voitures");
+	ft_add_this_car(car, CARS_FILE);
 }
 
 /*
@@ -212,24 +213,25 @@ int	print_modify_menu(int *id, int *choice, int *nbr, char *str)
 	scanf("%d", id);
 	while (1)
 	{
-		printf("Choisir l'attribut que vous souhaitez modifier :\n");
-		printf("\tNbplaces:.........1\n");
-		printf("\tPrixJour:.........2\n");
-		printf("\tIdVoiture:........3\n");
-		printf("\tMarque:...........4\n");
-		printf("\tCouleur:..........5\n");
-		printf("\tNomVoiture:.......6\n");
-		printf("\tEnLocation:.......7\n");
+		printf("Que voulez-vous modifier?\n");
+		printf("\t1 -- Nbplaces.\n");
+		printf("\t2 -- PrixJour.\n");
+		printf("\t3 -- IdVoiture.\n");
+		printf("\t4 -- Marque.\n");
+		printf("\t5 -- Couleur.\n");
+		printf("\t6 -- NomVoiture.\n");
+		printf("\t7 -- EnLocation.\n");
+		printf("Votre choix :  ");
 		scanf("%d", choice);
 		if (*choice > 0 && *choice < 4)
 		{
-			printf("saisir la modification: ");
+			printf("Saisir la modification: ");
 			scanf("%d", nbr);
 			return (0);
 		}
 		else if (*choice > 3 && *choice < 8)
 		{
-			printf("saisir la modification: ");
+			printf("Saisir la modification: ");
 			scanf("%20s", str);
 			return (1);
 		}
@@ -295,8 +297,8 @@ void	delete_this_car(voiture car)
 			ft_add_this_car(temp_car, "replica.txt");
 	}
 	fclose(fileptr1);
-	remove("Voitures");
-	rename("replica.txt", "Voitures");
+	remove(CARS_FILE);
+	rename("replica.txt", CARS_FILE);
 	return ;
 }
 

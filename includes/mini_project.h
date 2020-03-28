@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 #define  HORZ	"\e[0;36m\u2501\u2501\u2501\u2501\e[0m"
 #define  T_HORZ	"\e[0;36m\u2500\u2500\u2500\u2500\e[0m"
@@ -28,9 +29,9 @@
 #define  G_DL	"\e[0;32m\u2517\e[0m"
 #define  G_DR	"\e[0;32m\u251B\e[0m"
 
-#define CARS_FILE   "../Data/Voitures"
-#define CLIENT_FILE "../Data/Clients"
-#define CONTRA_FILE "../Data/ContratsLocations"
+#define CARS_FILE   "./Data/Voitures"
+#define CLIENT_FILE "./Data/Clients"
+#define CONTRA_FILE "./Data/ContratsLocations"
 
 typedef struct	date
 {
@@ -75,6 +76,7 @@ typedef	struct	client
 **  in file : main.c
 */
 int		print_this_menu(char buff[][50], int size);
+char		*ft_read_buffer(char *str, int buff_size);
 
 /*
 **  in file : rental.c
@@ -109,8 +111,9 @@ void	modify_client();
 void	del_client();
 
 void	add_this_client(client cl, char *file);
-int		read_one_client(client *cl, FILE *file);
-void	del_this_client(int id);
+bool	ft_check_client(int id);
+int	read_one_client(client *cl, FILE *file);
+int	del_this_client(int id);
 void	print_one_client(client cl);
 void	get_client_info(client *cl);
 

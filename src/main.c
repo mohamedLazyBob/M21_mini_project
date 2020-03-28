@@ -30,6 +30,34 @@ int	print_this_menu(char buff[][50], int size)
 ** ***************************************************************************
 */
 
+char	*ft_read_buffer(char *str, int buff_size)
+{
+	//char buff[514] = { 0 };
+	char	*buff = NULL;
+	size_t	len = 0;
+	int	linesize = 0;
+	char	*ret;
+
+	//ret = fgets(buff, 514, stdin);
+	//scanf("%s", buff);
+	do
+	{
+		linesize = getline(&buff, &len, stdin);
+		//printf("buff == [%s] , size = %d;\n", buff, linesize);
+	} while (linesize == 1);// in case of a leftover newline/whitespace
+	buff[linesize - 1] = 0;
+//	printf("buff == [%s] , size = %d;\n", buff, linesize);
+	memset(str, 0, buff_size);
+	strncpy(str, buff, buff_size - 1);
+	if (buff)
+		free(buff);
+	return (ret);
+}
+
+/*
+** ***************************************************************************
+*/
+
 int		main(void)
 {
 	int	choice;
@@ -50,5 +78,15 @@ int		main(void)
 	   	else if (choice == 3)
 	   		ft_clients_management();
 	} while (choice >= 0 && choice < 4);
+
+/*	char line[10];
+	for (int i = 0; i < 5; i++)
+	{
+		char *ret = ft_read_buffer(line, 10);
+		printf("you've entred : [%s], %s;\n", line, ret);
+		printf("number : ");
+		scanf("%d\n", &choice);
+	}
+*/
 	return (0);
 }
