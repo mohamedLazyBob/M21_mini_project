@@ -14,21 +14,12 @@ Programmation 02, Mini Projet.
 	</a>
 </div>
 
-<!-- <p align="center">
-  <img width="550" height="300" src="./pics/menu_principal.png">
-</p>
--->
-
 ## Table of content
 
 - [Installation](#installation-guide)
-
 - [Usage](#how-to)
-
 - [Compatibility](#compatibility)
-
 - [License](#license)
-
 - [Statement](#Project-sheets)
 
 <br/>
@@ -43,9 +34,8 @@ Programmation 02, Mini Projet.
 3.  Execute the executable that's called `location`, like this : `./location`
 
  <div style="text-align: center; ">
-		<img src="./pics/Pic2.png">
+		<img src="./etc/Pic2.png">
 </div>
-
 
 ### How to
 - `make all` Or `make` : To compile everything.
